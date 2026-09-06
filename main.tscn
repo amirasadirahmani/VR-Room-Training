@@ -1,0 +1,506 @@
+[gd_scene load_steps=38 format=3 uid="uid://81pysq5vvgpb"]
+
+[ext_resource type="PackedScene" path="res://addons/godot-xr-tools/xr/start_xr.tscn" id="1_startxr"]
+[ext_resource type="PackedScene" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_hand_low.tscn" id="2_lefthand"]
+[ext_resource type="PackedScene" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_hand_low.tscn" id="3_righthand"]
+[ext_resource type="PackedScene" path="res://addons/godot-xr-tools/functions/function_pickup.tscn" id="4_pickup"]
+[ext_resource type="PackedScene" path="res://scenes/grinder/meat_grinder_assembly.tscn" id="5_assembly"]
+[ext_resource type="Script" path="res://scripts/ui/vr_menu_button.gd" id="6_button"]
+
+[sub_resource type="StandardMaterial3D" id="MatFloor"]
+albedo_color = Color(0.075, 0.085, 0.095, 1)
+roughness = 0.88
+[sub_resource type="StandardMaterial3D" id="MatWall"]
+albedo_color = Color(0.32, 0.35, 0.38, 1)
+roughness = 0.82
+[sub_resource type="StandardMaterial3D" id="MatWallPanel"]
+albedo_color = Color(0.16, 0.18, 0.20, 1)
+metallic = 0.22
+roughness = 0.55
+[sub_resource type="StandardMaterial3D" id="MatSteel"]
+albedo_color = Color(0.25, 0.28, 0.31, 1)
+metallic = 0.62
+roughness = 0.36
+[sub_resource type="StandardMaterial3D" id="MatTableTop"]
+albedo_color = Color(0.30, 0.33, 0.35, 1)
+metallic = 0.72
+roughness = 0.32
+[sub_resource type="StandardMaterial3D" id="MatBoard"]
+albedo_color = Color(0.035, 0.055, 0.065, 1)
+metallic = 0.12
+roughness = 0.44
+[sub_resource type="StandardMaterial3D" id="MatBoardFrame"]
+albedo_color = Color(0.20, 0.48, 0.62, 1)
+metallic = 0.55
+roughness = 0.28
+[sub_resource type="StandardMaterial3D" id="MatAccentBlue"]
+albedo_color = Color(0.10, 0.44, 0.72, 1)
+emission_enabled = true
+emission = Color(0.05, 0.18, 0.32, 1)
+emission_energy_multiplier = 0.55
+[sub_resource type="StandardMaterial3D" id="MatAccentGreen"]
+albedo_color = Color(0.10, 0.52, 0.35, 1)
+emission_enabled = true
+emission = Color(0.04, 0.18, 0.10, 1)
+emission_energy_multiplier = 0.45
+[sub_resource type="StandardMaterial3D" id="MatAccentOrange"]
+albedo_color = Color(0.72, 0.35, 0.08, 1)
+emission_enabled = true
+emission = Color(0.22, 0.07, 0.01, 1)
+emission_energy_multiplier = 0.38
+[sub_resource type="StandardMaterial3D" id="MatPeg"]
+albedo_color = Color(0.14, 0.17, 0.19, 1)
+roughness = 0.72
+[sub_resource type="StandardMaterial3D" id="MatSafety"]
+albedo_color = Color(0.9, 0.64, 0.08, 1)
+roughness = 0.6
+
+[sub_resource type="BoxMesh" id="MeshFloor"]
+size = Vector3(7, 0.1, 7)
+material = SubResource("MatFloor")
+[sub_resource type="BoxShape3D" id="ShapeFloor"]
+size = Vector3(7, 0.1, 7)
+[sub_resource type="BoxMesh" id="MeshBackWall"]
+size = Vector3(6.6, 3.2, 0.10)
+material = SubResource("MatWall")
+[sub_resource type="BoxShape3D" id="ShapeBackWall"]
+size = Vector3(6.6, 3.2, 0.10)
+[sub_resource type="BoxMesh" id="MeshSideWall"]
+size = Vector3(0.10, 3.2, 6.5)
+material = SubResource("MatWall")
+[sub_resource type="BoxShape3D" id="ShapeSideWall"]
+size = Vector3(0.10, 3.2, 6.5)
+[sub_resource type="BoxMesh" id="MeshCeiling"]
+size = Vector3(6.6, 0.08, 6.5)
+material = SubResource("MatWallPanel")
+[sub_resource type="BoxShape3D" id="ShapeCeiling"]
+size = Vector3(6.6, 0.08, 6.5)
+
+[sub_resource type="BoxMesh" id="MeshTableTop"]
+size = Vector3(2.5, 0.12, 1.1)
+material = SubResource("MatTableTop")
+[sub_resource type="BoxShape3D" id="ShapeTableTop"]
+size = Vector3(2.5, 0.12, 1.1)
+[sub_resource type="BoxMesh" id="MeshLeg"]
+size = Vector3(0.10, 0.75, 0.10)
+material = SubResource("MatSteel")
+[sub_resource type="BoxShape3D" id="ShapeLeg"]
+size = Vector3(0.10, 0.75, 0.10)
+[sub_resource type="BoxMesh" id="MeshShelf"]
+size = Vector3(2.15, 0.07, 0.75)
+material = SubResource("MatSteel")
+[sub_resource type="BoxShape3D" id="ShapeShelf"]
+size = Vector3(2.15, 0.07, 0.75)
+
+[sub_resource type="BoxMesh" id="MeshCabinet"]
+size = Vector3(0.78, 1.55, 0.48)
+material = SubResource("MatWallPanel")
+[sub_resource type="BoxShape3D" id="ShapeCabinet"]
+size = Vector3(0.78, 1.55, 0.48)
+[sub_resource type="BoxMesh" id="MeshRackShelf"]
+size = Vector3(1.35, 0.08, 0.48)
+material = SubResource("MatSteel")
+[sub_resource type="BoxShape3D" id="ShapeRackShelf"]
+size = Vector3(1.35, 0.08, 0.48)
+[sub_resource type="BoxMesh" id="MeshRackPost"]
+size = Vector3(0.07, 1.7, 0.07)
+material = SubResource("MatSteel")
+[sub_resource type="BoxShape3D" id="ShapeRackPost"]
+size = Vector3(0.07, 1.7, 0.07)
+
+[sub_resource type="BoxMesh" id="MeshBoard"]
+size = Vector3(3.25, 1.35, 0.07)
+material = SubResource("MatBoard")
+[sub_resource type="BoxShape3D" id="ShapeBoard"]
+size = Vector3(3.25, 1.35, 0.07)
+[sub_resource type="BoxMesh" id="MeshBoardFrameH"]
+size = Vector3(3.35, 0.055, 0.10)
+material = SubResource("MatBoardFrame")
+[sub_resource type="BoxMesh" id="MeshBoardFrameV"]
+size = Vector3(0.055, 1.42, 0.10)
+material = SubResource("MatBoardFrame")
+
+[sub_resource type="BoxMesh" id="MeshButton"]
+size = Vector3(0.48, 0.15, 0.07)
+material = SubResource("MatAccentBlue")
+[sub_resource type="BoxMesh" id="MeshButtonGreen"]
+size = Vector3(0.48, 0.15, 0.07)
+material = SubResource("MatAccentGreen")
+[sub_resource type="BoxMesh" id="MeshButtonOrange"]
+size = Vector3(0.48, 0.15, 0.07)
+material = SubResource("MatAccentOrange")
+[sub_resource type="BoxShape3D" id="ShapeButton"]
+size = Vector3(0.54, 0.18, 0.12)
+
+[sub_resource type="CapsuleShape3D" id="ShapePlayerBody"]
+radius = 0.22
+height = 1.05
+[sub_resource type="SphereShape3D" id="ShapeHand"]
+radius = 0.065
+
+[sub_resource type="Environment" id="EnvironmentMain"]
+background_mode = 1
+background_color = Color(0.018, 0.025, 0.032, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.65, 0.74, 0.82, 1)
+ambient_light_energy = 0.38
+
+[node name="Main" type="Node3D"]
+[node name="StartXR" parent="." instance=ExtResource("1_startxr")]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("EnvironmentMain")
+
+[node name="XROrigin3D" type="XROrigin3D" parent="."]
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
+position = Vector3(0, 1.7, 0)
+far = 100.0
+[node name="PlayerBodyCollider" type="AnimatableBody3D" parent="XROrigin3D/XRCamera3D" groups=["player_body"]]
+position = Vector3(0, -0.72, 0.08)
+collision_layer = 2
+collision_mask = 4
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XROrigin3D/XRCamera3D/PlayerBodyCollider"]
+shape = SubResource("ShapePlayerBody")
+
+[node name="left_hand" type="XRController3D" parent="XROrigin3D"]
+position = Vector3(-0.3, 1.25, -0.45)
+tracker = &"left_hand"
+pose = &"grip"
+[node name="HandModel" parent="XROrigin3D/left_hand" instance=ExtResource("2_lefthand")]
+[node name="FunctionPickup" parent="XROrigin3D/left_hand" instance=ExtResource("4_pickup")]
+grab_distance = 0.22
+ranged_enable = false
+[node name="HandCollider" type="AnimatableBody3D" parent="XROrigin3D/left_hand" groups=["vr_hand"]]
+collision_layer = 8
+collision_mask = 4
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XROrigin3D/left_hand/HandCollider"]
+shape = SubResource("ShapeHand")
+
+[node name="right_hand" type="XRController3D" parent="XROrigin3D"]
+position = Vector3(0.3, 1.25, -0.45)
+tracker = &"right_hand"
+pose = &"grip"
+[node name="HandModel" parent="XROrigin3D/right_hand" instance=ExtResource("3_righthand")]
+[node name="FunctionPickup" parent="XROrigin3D/right_hand" instance=ExtResource("4_pickup")]
+grab_distance = 0.22
+ranged_enable = false
+[node name="HandCollider" type="AnimatableBody3D" parent="XROrigin3D/right_hand" groups=["vr_hand"]]
+collision_layer = 8
+collision_mask = 4
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XROrigin3D/right_hand/HandCollider"]
+shape = SubResource("ShapeHand")
+
+[node name="EnvironmentRoot" type="Node3D" parent="."]
+[node name="Floor" type="StaticBody3D" parent="EnvironmentRoot"]
+position = Vector3(0, -0.05, -1.1)
+collision_layer = 1
+collision_mask = 4
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/Floor"]
+mesh = SubResource("MeshFloor")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/Floor"]
+shape = SubResource("ShapeFloor")
+
+[node name="BackWall" type="StaticBody3D" parent="EnvironmentRoot"]
+position = Vector3(0, 1.60, -3.35)
+collision_layer = 1
+collision_mask = 4
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/BackWall"]
+mesh = SubResource("MeshBackWall")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/BackWall"]
+shape = SubResource("ShapeBackWall")
+[node name="LeftWall" type="StaticBody3D" parent="EnvironmentRoot"]
+position = Vector3(-3.25, 1.60, -0.55)
+collision_layer = 1
+collision_mask = 4
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/LeftWall"]
+mesh = SubResource("MeshSideWall")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/LeftWall"]
+shape = SubResource("ShapeSideWall")
+[node name="RightWall" type="StaticBody3D" parent="EnvironmentRoot"]
+position = Vector3(3.25, 1.60, -0.55)
+collision_layer = 1
+collision_mask = 4
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/RightWall"]
+mesh = SubResource("MeshSideWall")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/RightWall"]
+shape = SubResource("ShapeSideWall")
+[node name="Ceiling" type="StaticBody3D" parent="EnvironmentRoot"]
+position = Vector3(0, 3.15, -0.55)
+collision_layer = 1
+collision_mask = 4
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/Ceiling"]
+mesh = SubResource("MeshCeiling")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/Ceiling"]
+shape = SubResource("ShapeCeiling")
+
+[node name="TrainingTable" type="StaticBody3D" parent="EnvironmentRoot"]
+position = Vector3(0, 0.75, -1.15)
+collision_layer = 1
+collision_mask = 4
+[node name="Top" type="MeshInstance3D" parent="EnvironmentRoot/TrainingTable"]
+mesh = SubResource("MeshTableTop")
+[node name="TopCollision" type="CollisionShape3D" parent="EnvironmentRoot/TrainingTable"]
+shape = SubResource("ShapeTableTop")
+[node name="LegFL" type="MeshInstance3D" parent="EnvironmentRoot/TrainingTable"]
+position = Vector3(-1.08, -0.43, 0.42)
+mesh = SubResource("MeshLeg")
+[node name="LegFLCollision" type="CollisionShape3D" parent="EnvironmentRoot/TrainingTable"]
+position = Vector3(-1.08, -0.43, 0.42)
+shape = SubResource("ShapeLeg")
+[node name="LegFR" type="MeshInstance3D" parent="EnvironmentRoot/TrainingTable"]
+position = Vector3(1.08, -0.43, 0.42)
+mesh = SubResource("MeshLeg")
+[node name="LegFRCollision" type="CollisionShape3D" parent="EnvironmentRoot/TrainingTable"]
+position = Vector3(1.08, -0.43, 0.42)
+shape = SubResource("ShapeLeg")
+[node name="LegBL" type="MeshInstance3D" parent="EnvironmentRoot/TrainingTable"]
+position = Vector3(-1.08, -0.43, -0.42)
+mesh = SubResource("MeshLeg")
+[node name="LegBLCollision" type="CollisionShape3D" parent="EnvironmentRoot/TrainingTable"]
+position = Vector3(-1.08, -0.43, -0.42)
+shape = SubResource("ShapeLeg")
+[node name="LegBR" type="MeshInstance3D" parent="EnvironmentRoot/TrainingTable"]
+position = Vector3(1.08, -0.43, -0.42)
+mesh = SubResource("MeshLeg")
+[node name="LegBRCollision" type="CollisionShape3D" parent="EnvironmentRoot/TrainingTable"]
+position = Vector3(1.08, -0.43, -0.42)
+shape = SubResource("ShapeLeg")
+[node name="LowerShelf" type="MeshInstance3D" parent="EnvironmentRoot/TrainingTable"]
+position = Vector3(0, -0.57, 0)
+mesh = SubResource("MeshShelf")
+[node name="LowerShelfCollision" type="CollisionShape3D" parent="EnvironmentRoot/TrainingTable"]
+position = Vector3(0, -0.57, 0)
+shape = SubResource("ShapeShelf")
+
+[node name="LeftCabinet" type="StaticBody3D" parent="EnvironmentRoot"]
+position = Vector3(-2.45, 0.78, -2.55)
+collision_layer = 1
+collision_mask = 4
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/LeftCabinet"]
+mesh = SubResource("MeshCabinet")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/LeftCabinet"]
+shape = SubResource("ShapeCabinet")
+[node name="CabinetLabel" type="Label3D" parent="EnvironmentRoot/LeftCabinet"]
+position = Vector3(0, 0.55, 0.255)
+text = "ابزار"
+font_size = 22
+pixel_size = 0.0016
+outline_size = 4
+
+[node name="RightRack" type="Node3D" parent="EnvironmentRoot"]
+position = Vector3(2.25, 0.90, -2.65)
+[node name="PostL" type="StaticBody3D" parent="EnvironmentRoot/RightRack"]
+position = Vector3(-0.62, 0, 0)
+collision_layer = 1
+collision_mask = 4
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/RightRack/PostL"]
+mesh = SubResource("MeshRackPost")
+[node name="Collision" type="CollisionShape3D" parent="EnvironmentRoot/RightRack/PostL"]
+shape = SubResource("ShapeRackPost")
+[node name="PostR" type="StaticBody3D" parent="EnvironmentRoot/RightRack"]
+position = Vector3(0.62, 0, 0)
+collision_layer = 1
+collision_mask = 4
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/RightRack/PostR"]
+mesh = SubResource("MeshRackPost")
+[node name="Collision" type="CollisionShape3D" parent="EnvironmentRoot/RightRack/PostR"]
+shape = SubResource("ShapeRackPost")
+[node name="Shelf1" type="StaticBody3D" parent="EnvironmentRoot/RightRack"]
+position = Vector3(0, -0.55, 0)
+collision_layer = 1
+collision_mask = 4
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/RightRack/Shelf1"]
+mesh = SubResource("MeshRackShelf")
+[node name="Collision" type="CollisionShape3D" parent="EnvironmentRoot/RightRack/Shelf1"]
+shape = SubResource("ShapeRackShelf")
+[node name="Shelf2" type="StaticBody3D" parent="EnvironmentRoot/RightRack"]
+position = Vector3(0, 0.02, 0)
+collision_layer = 1
+collision_mask = 4
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/RightRack/Shelf2"]
+mesh = SubResource("MeshRackShelf")
+[node name="Collision" type="CollisionShape3D" parent="EnvironmentRoot/RightRack/Shelf2"]
+shape = SubResource("ShapeRackShelf")
+[node name="Shelf3" type="StaticBody3D" parent="EnvironmentRoot/RightRack"]
+position = Vector3(0, 0.58, 0)
+collision_layer = 1
+collision_mask = 4
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/RightRack/Shelf3"]
+mesh = SubResource("MeshRackShelf")
+[node name="Collision" type="CollisionShape3D" parent="EnvironmentRoot/RightRack/Shelf3"]
+shape = SubResource("ShapeRackShelf")
+
+[node name="InstructionBoard" type="StaticBody3D" parent="EnvironmentRoot"]
+position = Vector3(0, 1.78, -3.27)
+collision_layer = 1
+collision_mask = 4
+[node name="Board" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard"]
+mesh = SubResource("MeshBoard")
+[node name="Collision" type="CollisionShape3D" parent="EnvironmentRoot/InstructionBoard"]
+shape = SubResource("ShapeBoard")
+[node name="FrameTop" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard"]
+position = Vector3(0, 0.70, 0.015)
+mesh = SubResource("MeshBoardFrameH")
+[node name="FrameBottom" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard"]
+position = Vector3(0, -0.70, 0.015)
+mesh = SubResource("MeshBoardFrameH")
+[node name="FrameLeft" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard"]
+position = Vector3(-1.66, 0, 0.015)
+mesh = SubResource("MeshBoardFrameV")
+[node name="FrameRight" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard"]
+position = Vector3(1.66, 0, 0.015)
+mesh = SubResource("MeshBoardFrameV")
+[node name="Title" type="Label3D" parent="EnvironmentRoot/InstructionBoard"]
+position = Vector3(-0.72, 0.50, 0.05)
+text = "ایستگاه آموزش مونتاژ چرخ‌گوشت"
+font_size = 30
+pixel_size = 0.00165
+outline_size = 4
+modulate = Color(0.62, 0.88, 1, 1)
+[node name="ModeLabel" type="Label3D" parent="EnvironmentRoot/InstructionBoard"]
+position = Vector3(-1.22, 0.30, 0.05)
+text = "آموزش مرحله‌ای"
+font_size = 21
+pixel_size = 0.00155
+outline_size = 4
+modulate = Color(0.48, 0.82, 1, 1)
+[node name="StepLabel" type="Label3D" parent="EnvironmentRoot/InstructionBoard"]
+position = Vector3(-0.38, 0.30, 0.05)
+text = "مرحله ۱ از ۶"
+font_size = 21
+pixel_size = 0.00155
+outline_size = 4
+modulate = Color(0.94, 0.94, 0.98, 1)
+[node name="TutorialLabel" type="Label3D" parent="EnvironmentRoot/InstructionBoard"]
+position = Vector3(-0.70, -0.02, 0.05)
+text = "مارپیچ را بردار\nلبه قرمز را به حلقه قرمز دهانه نزدیک کن"
+font_size = 23
+pixel_size = 0.00150
+outline_size = 5
+modulate = Color(0.96, 0.97, 0.99, 1)
+[node name="FeedbackLabel" type="Label3D" parent="EnvironmentRoot/InstructionBoard"]
+position = Vector3(-0.70, -0.44, 0.055)
+text = ""
+font_size = 22
+pixel_size = 0.00155
+outline_size = 5
+modulate = Color(0.3, 1, 0.5, 0)
+[node name="ScoreLabel" type="Label3D" parent="EnvironmentRoot/InstructionBoard"]
+position = Vector3(0.60, 0.30, 0.05)
+text = "امتیاز  0"
+font_size = 22
+pixel_size = 0.00155
+outline_size = 4
+modulate = Color(0.40, 1.0, 0.60, 1)
+[node name="TimeLabel" type="Label3D" parent="EnvironmentRoot/InstructionBoard"]
+position = Vector3(0.60, 0.08, 0.05)
+text = "زمان  00:00"
+font_size = 20
+pixel_size = 0.00145
+outline_size = 4
+[node name="MistakesLabel" type="Label3D" parent="EnvironmentRoot/InstructionBoard"]
+position = Vector3(0.60, -0.13, 0.05)
+text = "خطا  0"
+font_size = 20
+pixel_size = 0.00145
+outline_size = 4
+modulate = Color(1.0, 0.68, 0.34, 1)
+
+[node name="MenuPanel" type="Node3D" parent="EnvironmentRoot/InstructionBoard"]
+position = Vector3(1.15, -0.17, 0.065)
+[node name="MenuTitle" type="Label3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel"]
+position = Vector3(0, 0.36, 0.02)
+text = "حالت اجرا"
+font_size = 19
+pixel_size = 0.00145
+outline_size = 4
+[node name="TrainingButton" type="Area3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel"]
+position = Vector3(0, 0.15, 0)
+collision_layer = 16
+collision_mask = 8
+monitoring = true
+script = ExtResource("6_button")
+action = "training"
+manager_path = NodePath("../../../../MeatGrinderAssembly/AssemblyManager")
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/TrainingButton"]
+mesh = SubResource("MeshButton")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/TrainingButton"]
+shape = SubResource("ShapeButton")
+[node name="Label" type="Label3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/TrainingButton"]
+position = Vector3(0, 0, 0.045)
+text = "آموزش"
+font_size = 18
+pixel_size = 0.00145
+outline_size = 4
+[node name="FreeButton" type="Area3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel"]
+position = Vector3(0, -0.06, 0)
+collision_layer = 16
+collision_mask = 8
+monitoring = true
+script = ExtResource("6_button")
+action = "free_practice"
+manager_path = NodePath("../../../../MeatGrinderAssembly/AssemblyManager")
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/FreeButton"]
+mesh = SubResource("MeshButtonGreen")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/FreeButton"]
+shape = SubResource("ShapeButton")
+[node name="Label" type="Label3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/FreeButton"]
+position = Vector3(0, 0, 0.045)
+text = "تمرین آزاد"
+font_size = 17
+pixel_size = 0.0014
+outline_size = 4
+[node name="ResetButton" type="Area3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel"]
+position = Vector3(0, -0.27, 0)
+collision_layer = 16
+collision_mask = 8
+monitoring = true
+script = ExtResource("6_button")
+action = "reset"
+manager_path = NodePath("../../../../MeatGrinderAssembly/AssemblyManager")
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/ResetButton"]
+mesh = SubResource("MeshButtonOrange")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/ResetButton"]
+shape = SubResource("ShapeButton")
+[node name="Label" type="Label3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/ResetButton"]
+position = Vector3(0, 0, 0.045)
+text = "شروع مجدد"
+font_size = 17
+pixel_size = 0.0014
+outline_size = 4
+
+[node name="SafetyPoster" type="Node3D" parent="EnvironmentRoot"]
+position = Vector3(-2.30, 1.95, -3.25)
+[node name="Panel" type="MeshInstance3D" parent="EnvironmentRoot/SafetyPoster"]
+mesh = SubResource("MeshButtonOrange")
+scale = Vector3(1.0, 2.4, 0.7)
+[node name="Label" type="Label3D" parent="EnvironmentRoot/SafetyPoster"]
+position = Vector3(0, 0, 0.06)
+text = "ایمنی کارگاه\nدست‌ها دور از تیغه"
+font_size = 18
+pixel_size = 0.00135
+outline_size = 4
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="EnvironmentRoot"]
+rotation_degrees = Vector3(-58, -22, 0)
+light_energy = 0.75
+shadow_enabled = true
+[node name="KeyLight" type="OmniLight3D" parent="EnvironmentRoot"]
+position = Vector3(0.7, 2.55, -0.85)
+omni_range = 4.5
+light_energy = 1.65
+shadow_enabled = false
+[node name="FillLight" type="OmniLight3D" parent="EnvironmentRoot"]
+position = Vector3(-1.6, 2.1, -1.5)
+omni_range = 3.8
+light_energy = 0.85
+shadow_enabled = false
+[node name="BoardLight" type="SpotLight3D" parent="EnvironmentRoot"]
+position = Vector3(0, 2.75, -2.25)
+rotation_degrees = Vector3(-28, 0, 0)
+spot_range = 3.0
+spot_angle = 46.0
+light_energy = 1.25
+shadow_enabled = false
+
+[node name="MeatGrinderAssembly" parent="." instance=ExtResource("5_assembly")]
+position = Vector3(0, 0.732, -1.15)

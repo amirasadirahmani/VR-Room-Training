@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3]
+[ext_resource type="PackedScene" path="res://assets/models/grinder/part_pusher.glb" id="1_model"]
+[ext_resource type="Script" path="res://scripts/assembly/assembly_part.gd" id="2_script"]
+[sub_resource type="CapsuleShape3D" id="Shape"]
+radius = 0.052
+height = 0.23
+[node name="PartPusher" type="RigidBody3D"]
+collision_layer = 4
+collision_mask = 15
+mass = 0.35
+freeze = true
+freeze_mode = 1
+contact_monitor = true
+max_contacts_reported = 8
+script = ExtResource("2_script")
+part_id = &"pusher"
+display_name = "گوشت‌کوب"
+required_step = 6
+score_value = 10
+guide_axis = 3
+guide_offset_m = 0.004
+guide_inner_radius_m = 0.018
+guide_outer_radius_m = 0.026
+name_label_height_m = 0.27
+[node name="Model" parent="." instance=ExtResource("1_model")]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("Shape")

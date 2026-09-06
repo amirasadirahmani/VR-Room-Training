@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3]
+[ext_resource type="PackedScene" path="res://assets/models/grinder/part_auger.glb" id="1_model"]
+[ext_resource type="Script" path="res://scripts/assembly/assembly_part.gd" id="2_script"]
+[sub_resource type="BoxShape3D" id="Shape"]
+size = Vector3(0.32, 0.115, 0.115)
+[node name="PartAuger" type="RigidBody3D"]
+collision_layer = 4
+collision_mask = 15
+mass = 0.75
+freeze = true
+freeze_mode = 1
+contact_monitor = true
+max_contacts_reported = 8
+script = ExtResource("2_script")
+part_id = &"auger"
+display_name = "مارپیچ"
+required_step = 1
+score_value = 10
+guide_axis = 1
+guide_offset_m = 0.006
+guide_inner_radius_m = 0.02
+guide_outer_radius_m = 0.028
+name_label_height_m = 0.14
+[node name="Model" parent="." instance=ExtResource("1_model")]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("Shape")

@@ -1,0 +1,185 @@
+{
+  "project": "VR_Training_MeatGrinder",
+  "units": "meters",
+  "pivot_convention": "Each exported GLB root is at local origin (0,0,0). Place the GLB root on the matching Godot SnapPoint.",
+  "authoring_axis": {
+    "assembly_axis": "+X inward from front opening",
+    "up": "+Z"
+  },
+  "recommended_default_training_sequence": [
+    "auger",
+    "blade",
+    "plate",
+    "lock_ring",
+    "hopper_tray",
+    "pusher"
+  ],
+  "extended_parts": [
+    "handle",
+    "food_tube",
+    "motor_unit",
+    "sausage_attachment"
+  ],
+  "pusher_behavior": "MVP: place/park the pusher at a designated training socket after the hopper is installed; define that socket position in Godot.",
+  "notes": [
+    "Handle and MotorUnit are alternative rear-drive variants; do not install both.",
+    "SausageAttachment is an optional accessory scenario.",
+    "FoodTube is modularized for training although many real grinders cast it into the body."
+  ],
+  "parts": [
+    {
+      "root_name": "GrinderBase",
+      "part_id": "grinder_base",
+      "socket_id": "",
+      "file": "grinder_base.glb",
+      "sequence": 0,
+      "optional": false,
+      "assembly_anchor_blender_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "glb_root_is_snap_origin": true
+    },
+    {
+      "root_name": "Part_Auger",
+      "part_id": "auger",
+      "socket_id": "socket_auger",
+      "file": "part_auger.glb",
+      "sequence": 1,
+      "optional": false,
+      "assembly_anchor_blender_m": [
+        -0.18199999630451202,
+        0.0,
+        0.3400000035762787
+      ],
+      "glb_root_is_snap_origin": true
+    },
+    {
+      "root_name": "Part_Blade",
+      "part_id": "blade",
+      "socket_id": "socket_blade",
+      "file": "part_blade.glb",
+      "sequence": 2,
+      "optional": false,
+      "assembly_anchor_blender_m": [
+        -0.20999999344348907,
+        0.0,
+        0.3400000035762787
+      ],
+      "glb_root_is_snap_origin": true
+    },
+    {
+      "root_name": "Part_Plate",
+      "part_id": "plate",
+      "socket_id": "socket_plate",
+      "file": "part_plate.glb",
+      "sequence": 3,
+      "optional": false,
+      "assembly_anchor_blender_m": [
+        -0.2280000001192093,
+        0.0,
+        0.3400000035762787
+      ],
+      "glb_root_is_snap_origin": true
+    },
+    {
+      "root_name": "Part_LockRing",
+      "part_id": "lock_ring",
+      "socket_id": "socket_lock_ring",
+      "file": "part_lock_ring.glb",
+      "sequence": 4,
+      "optional": false,
+      "assembly_anchor_blender_m": [
+        -0.2460000067949295,
+        0.0,
+        0.3400000035762787
+      ],
+      "glb_root_is_snap_origin": true
+    },
+    {
+      "root_name": "Part_FoodTube",
+      "part_id": "food_tube",
+      "socket_id": "socket_food_tube",
+      "file": "part_food_tube.glb",
+      "sequence": 5,
+      "optional": true,
+      "assembly_anchor_blender_m": [
+        0.0,
+        0.0,
+        0.4086399972438812
+      ],
+      "glb_root_is_snap_origin": true
+    },
+    {
+      "root_name": "Part_HopperTray",
+      "part_id": "hopper_tray",
+      "socket_id": "socket_hopper_tray",
+      "file": "part_hopper_tray.glb",
+      "sequence": 6,
+      "optional": false,
+      "assembly_anchor_blender_m": [
+        0.0,
+        0.0,
+        0.5986400246620178
+      ],
+      "glb_root_is_snap_origin": true
+    },
+    {
+      "root_name": "Part_Pusher",
+      "part_id": "pusher",
+      "socket_id": "socket_pusher",
+      "file": "part_pusher.glb",
+      "sequence": 7,
+      "optional": false,
+      "assembly_anchor_blender_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "glb_root_is_snap_origin": true
+    },
+    {
+      "root_name": "Part_Handle",
+      "part_id": "handle",
+      "socket_id": "socket_handle",
+      "file": "part_handle.glb",
+      "sequence": 8,
+      "optional": true,
+      "assembly_anchor_blender_m": [
+        0.20499999821186066,
+        0.0,
+        0.3400000035762787
+      ],
+      "glb_root_is_snap_origin": true
+    },
+    {
+      "root_name": "Part_MotorUnit",
+      "part_id": "motor_unit",
+      "socket_id": "socket_handle",
+      "file": "part_motor_unit.glb",
+      "sequence": 8,
+      "optional": true,
+      "assembly_anchor_blender_m": [
+        0.20499999821186066,
+        0.0,
+        0.3400000035762787
+      ],
+      "glb_root_is_snap_origin": true
+    },
+    {
+      "root_name": "Part_SausageAttachment",
+      "part_id": "sausage_attachment",
+      "socket_id": "socket_sausage_attachment",
+      "file": "part_sausage_attachment.glb",
+      "sequence": 0,
+      "optional": true,
+      "assembly_anchor_blender_m": [
+        -0.25200000405311584,
+        0.0,
+        0.3400000035762787
+      ],
+      "glb_root_is_snap_origin": true
+    }
+  ]
+}

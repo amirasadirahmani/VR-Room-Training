@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3]
+[ext_resource type="PackedScene" path="res://assets/models/grinder/part_hopper_tray.glb" id="1_model"]
+[ext_resource type="Script" path="res://scripts/assembly/assembly_part.gd" id="2_script"]
+[sub_resource type="BoxShape3D" id="Shape"]
+size = Vector3(0.28, 0.075, 0.215)
+[node name="PartHopperTray" type="RigidBody3D"]
+collision_layer = 4
+collision_mask = 15
+mass = 0.75
+freeze = true
+freeze_mode = 1
+contact_monitor = true
+max_contacts_reported = 8
+script = ExtResource("2_script")
+part_id = &"hopper_tray"
+display_name = "سینی ورودی"
+required_step = 5
+score_value = 10
+guide_axis = 3
+guide_offset_m = 0.004
+guide_inner_radius_m = 0.022
+guide_outer_radius_m = 0.032
+name_label_height_m = 0.13
+[node name="Model" parent="." instance=ExtResource("1_model")]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("Shape")
