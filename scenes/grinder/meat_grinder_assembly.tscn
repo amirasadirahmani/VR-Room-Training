@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3]
+[gd_scene load_steps=21 format=3]
 [ext_resource type="PackedScene" path="res://assets/models/grinder/grinder_base.glb" id="1_base"]
 [ext_resource type="PackedScene" path="res://assets/models/grinder/part_food_tube.glb" id="10_food_tube"]
 [ext_resource type="PackedScene" path="res://scenes/grinder/parts/part_auger.tscn" id="2_auger"]
@@ -9,6 +9,8 @@
 [ext_resource type="PackedScene" path="res://scenes/grinder/parts/part_pusher.tscn" id="7_pusher"]
 [ext_resource type="Script" path="res://scripts/assembly/snap_socket.gd" id="8_socket"]
 [ext_resource type="Script" path="res://scripts/assembly/assembly_manager.gd" id="9_manager"]
+[ext_resource type="Script" path="res://scripts/materials/surface_material_applier.gd" id="11_mat_applier"]
+[ext_resource type="Material" path="res://materials/workshop/stainless_brushed.tres" id="12_stainless"]
 
 [sub_resource type="BoxShape3D" id="BodyTop"]
 size = Vector3(0.38, 0.028, 0.18)
@@ -34,6 +36,8 @@ radius = 0.18
 rotation_degrees = Vector3(0, 180, 0)
 collision_layer = 1
 collision_mask = 4
+script = ExtResource("11_mat_applier")
+surface_material = ExtResource("12_stainless")
 [node name="Model" parent="GrinderBase" instance=ExtResource("1_base")]
 [node name="FixedFoodTube" parent="GrinderBase" instance=ExtResource("10_food_tube")]
 position = Vector3(0, 0.40864, 0)
@@ -70,13 +74,14 @@ socket_id = &"socket_auger"
 expected_part_id = &"auger"
 required_step = 1
 manager_path = NodePath("../../AssemblyManager")
-guide_axis = 0
+guide_axis = 1
 guide_offset_m = 0.018
 guide_inner_radius_m = 0.052
 guide_outer_radius_m = 0.064
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SnapSockets/SocketAuger"]
 shape = SubResource("SocketSphere")
 [node name="SnapPoint" type="Node3D" parent="SnapSockets/SocketAuger"]
+rotation_degrees = Vector3(0, 180, 0)
 
 [node name="SocketBlade" type="Area3D" parent="SnapSockets"]
 position = Vector3(0.210, 0.34, 0)
@@ -88,13 +93,14 @@ socket_id = &"socket_blade"
 expected_part_id = &"blade"
 required_step = 2
 manager_path = NodePath("../../AssemblyManager")
-guide_axis = 0
+guide_axis = 1
 guide_offset_m = 0.016
 guide_inner_radius_m = 0.013
 guide_outer_radius_m = 0.022
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SnapSockets/SocketBlade"]
 shape = SubResource("SocketSphere")
 [node name="SnapPoint" type="Node3D" parent="SnapSockets/SocketBlade"]
+rotation_degrees = Vector3(0, 180, 0)
 
 [node name="SocketPlate" type="Area3D" parent="SnapSockets"]
 position = Vector3(0.228, 0.34, 0)
@@ -106,13 +112,14 @@ socket_id = &"socket_plate"
 expected_part_id = &"plate"
 required_step = 3
 manager_path = NodePath("../../AssemblyManager")
-guide_axis = 0
+guide_axis = 1
 guide_offset_m = 0.016
 guide_inner_radius_m = 0.048
 guide_outer_radius_m = 0.061
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SnapSockets/SocketPlate"]
 shape = SubResource("SocketSphere")
 [node name="SnapPoint" type="Node3D" parent="SnapSockets/SocketPlate"]
+rotation_degrees = Vector3(0, 180, 0)
 
 [node name="SocketLockRing" type="Area3D" parent="SnapSockets"]
 position = Vector3(0.246, 0.34, 0)
@@ -124,13 +131,14 @@ socket_id = &"socket_lock_ring"
 expected_part_id = &"lock_ring"
 required_step = 4
 manager_path = NodePath("../../AssemblyManager")
-guide_axis = 0
+guide_axis = 1
 guide_offset_m = 0.018
 guide_inner_radius_m = 0.070
 guide_outer_radius_m = 0.086
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SnapSockets/SocketLockRing"]
 shape = SubResource("SocketSphere")
 [node name="SnapPoint" type="Node3D" parent="SnapSockets/SocketLockRing"]
+rotation_degrees = Vector3(0, 180, 0)
 
 [node name="SocketHopperTray" type="Area3D" parent="SnapSockets"]
 position = Vector3(0, 0.599, 0)

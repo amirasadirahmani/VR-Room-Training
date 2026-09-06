@@ -12,6 +12,14 @@ enum GuideAxis { X_POS, X_NEG, Y_POS, Y_NEG, Z_POS, Z_NEG }
 @export var score_value: int = AssemblySettings.CORRECT_PLACEMENT_SCORE
 @export var snap_duration_override: float = -1.0
 
+## Optional visual material override for all meshes in the imported model.
+@export var surface_material: Material
+
+## Presentation assist used while the part is held. This rotates only the visual
+## model (not the physics body) so flat ring/disc parts are easier to understand.
+@export var hold_visual_rotation_degrees: Vector3 = Vector3.ZERO
+@export var hold_visual_tilt_s: float = 0.14
+
 @export var guide_axis: int = GuideAxis.X_POS
 @export var guide_offset_m: float = 0.0
 @export var guide_inner_radius_m: float = 0.018
@@ -23,6 +31,9 @@ var is_placed: bool = false
 var wrong_attempts: int = 0
 
 var _guide_visual: MeshInstance3D = null
+var _model_node: Node3D = null
+var _model_initial_rotation_degrees: Vector3 = Vector3.ZERO
+var _model_tween: Tween = null
 var _guide_state: int = GuideState.OFF
 var _name_label: Label3D = null
 var _name_visible: bool = false
@@ -54,6 +65,7 @@ func _ready() -> void:
 	_last_safe_transform = global_transform
 	_last_move_pos = global_position
 
+	_setup_model_visual()
 	_setup_guide_visual()
 	_setup_name_label()
 	_setup_audio()
@@ -139,6 +151,7 @@ func snap_to(target: Transform3D) -> void:
 		drop()
 		await get_tree().process_frame
 
+	_restore_model_pose_immediate()
 	linear_velocity = Vector3.ZERO
 	angular_velocity = Vector3.ZERO
 	freeze = true
@@ -185,6 +198,7 @@ func reset_part() -> void:
 	global_transform = _initial_transform
 	_last_safe_transform = global_transform
 	set_guide_off()
+	_restore_model_pose_immediate()
 	_hide_name_immediate()
 
 func set_initial_transform_from_current() -> void:
@@ -208,9 +222,12 @@ func set_guide_ready() -> void:
 
 func set_guide_placed() -> void:
 	_set_guide_state(GuideState.PLACED)
+	if _guide_visual:
+		_guide_visual.visible = false
 
 func _on_picked_up(_pickable: XRToolsPickable) -> void:
 	_last_safe_transform = global_transform
+	_animate_model_hold_pose(true)
 	_last_move_pos = global_position
 	_play_once(_pickup_audio)
 	var manager := _manager()
@@ -220,6 +237,7 @@ func _on_picked_up(_pickable: XRToolsPickable) -> void:
 func _on_dropped(_pickable: XRToolsPickable) -> void:
 	if _snap_in_progress:
 		return
+	_animate_model_hold_pose(false)
 	var manager := _manager()
 	if manager:
 		manager.notify_part_dropped(self)
@@ -237,6 +255,36 @@ func _manager() -> AssemblyManager:
 		return null
 	return nodes[0] as AssemblyManager
 
+func _setup_model_visual() -> void:
+	_model_node = get_node_or_null("Model") as Node3D
+	if _model_node:
+		_model_initial_rotation_degrees = _model_node.rotation_degrees
+		if surface_material:
+			_apply_surface_material_recursive(_model_node)
+
+func _apply_surface_material_recursive(node: Node) -> void:
+	if node is MeshInstance3D:
+		(node as MeshInstance3D).material_override = surface_material
+	for child in node.get_children():
+		_apply_surface_material_recursive(child)
+
+func _animate_model_hold_pose(held: bool) -> void:
+	if _model_node == null or hold_visual_rotation_degrees.length_squared() < 0.000001:
+		return
+	if _model_tween and _model_tween.is_running():
+		_model_tween.kill()
+	var target := _model_initial_rotation_degrees + (hold_visual_rotation_degrees if held else Vector3.ZERO)
+	_model_tween = create_tween()
+	_model_tween.set_trans(Tween.TRANS_QUAD)
+	_model_tween.set_ease(Tween.EASE_OUT)
+	_model_tween.tween_property(_model_node, "rotation_degrees", target, hold_visual_tilt_s)
+
+func _restore_model_pose_immediate() -> void:
+	if _model_tween and _model_tween.is_running():
+		_model_tween.kill()
+	if _model_node:
+		_model_node.rotation_degrees = _model_initial_rotation_degrees
+
 func _setup_guide_visual() -> void:
 	_guide_visual = MeshInstance3D.new()
 	_guide_visual.name = "MatingEdgeGuide"
@@ -249,7 +297,10 @@ func _setup_guide_visual() -> void:
 	_guide_visual.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_guide_visual.position = _guide_axis_vector() * guide_offset_m
 	_guide_visual.rotation = _guide_axis_rotation()
-	add_child(_guide_visual)
+	if _model_node:
+		_model_node.add_child(_guide_visual)
+	else:
+		add_child(_guide_visual)
 	_guide_visual.visible = false
 
 func _setup_name_label() -> void:
@@ -361,12 +412,17 @@ func _guide_axis_rotation() -> Vector3:
 			return Vector3.ZERO
 
 func _set_guide_state(state: int) -> void:
-	if _guide_visual == null or _guide_state == state:
+	if _guide_visual == null:
+		return
+	# OFF/PLACED must always win, even if another frame just repainted the guide.
+	if state == GuideState.OFF or state == GuideState.PLACED:
+		_guide_state = state
+		_guide_visual.visible = false
+		return
+	if _guide_state == state:
 		return
 	_guide_state = state
 	match state:
-		GuideState.OFF, GuideState.PLACED:
-			_guide_visual.visible = false
 		GuideState.TARGET:
 			_guide_visual.visible = true
 			_apply_guide_material(AssemblySettings.GUIDE_COLOR_TARGET)

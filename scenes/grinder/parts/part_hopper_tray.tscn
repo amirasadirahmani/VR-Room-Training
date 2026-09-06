@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 [ext_resource type="PackedScene" path="res://assets/models/grinder/part_hopper_tray.glb" id="1_model"]
 [ext_resource type="Script" path="res://scripts/assembly/assembly_part.gd" id="2_script"]
+[ext_resource type="Material" path="res://materials/workshop/stainless_brushed.tres" id="3_surface"]
 [sub_resource type="BoxShape3D" id="Shape"]
 size = Vector3(0.28, 0.075, 0.215)
 [node name="PartHopperTray" type="RigidBody3D"]
@@ -16,6 +17,7 @@ part_id = &"hopper_tray"
 display_name = "سینی ورودی"
 required_step = 5
 score_value = 10
+surface_material = ExtResource("3_surface")
 guide_axis = 3
 guide_offset_m = 0.004
 guide_inner_radius_m = 0.022

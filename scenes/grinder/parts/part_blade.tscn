@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 [ext_resource type="PackedScene" path="res://assets/models/grinder/part_blade.glb" id="1_model"]
 [ext_resource type="Script" path="res://scripts/assembly/assembly_part.gd" id="2_script"]
+[ext_resource type="Material" path="res://materials/workshop/stainless_brushed.tres" id="3_surface"]
 [sub_resource type="BoxShape3D" id="Shape"]
 size = Vector3(0.030, 0.11, 0.11)
 [node name="PartBlade" type="RigidBody3D"]
@@ -16,6 +17,8 @@ part_id = &"blade"
 display_name = "تیغه"
 required_step = 2
 score_value = 10
+surface_material = ExtResource("3_surface")
+hold_visual_rotation_degrees = Vector3(0, 0, -65)
 guide_axis = 1
 guide_offset_m = 0.004
 guide_inner_radius_m = 0.014

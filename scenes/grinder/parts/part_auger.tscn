@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 [ext_resource type="PackedScene" path="res://assets/models/grinder/part_auger.glb" id="1_model"]
 [ext_resource type="Script" path="res://scripts/assembly/assembly_part.gd" id="2_script"]
+[ext_resource type="Material" path="res://materials/workshop/stainless_brushed.tres" id="3_surface"]
 [sub_resource type="BoxShape3D" id="Shape"]
 size = Vector3(0.32, 0.115, 0.115)
 [node name="PartAuger" type="RigidBody3D"]
@@ -16,6 +17,7 @@ part_id = &"auger"
 display_name = "مارپیچ"
 required_step = 1
 score_value = 10
+surface_material = ExtResource("3_surface")
 guide_axis = 1
 guide_offset_m = 0.006
 guide_inner_radius_m = 0.02

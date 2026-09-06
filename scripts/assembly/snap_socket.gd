@@ -127,12 +127,17 @@ func _guide_axis_rotation() -> Vector3:
 			return Vector3.ZERO
 
 func _set_guide_state(state: int) -> void:
-	if _guide_visual == null or _guide_state == state:
+	if _guide_visual == null:
+		return
+	# OFF/PLACED must always win, even if another frame just repainted the guide.
+	if state == GuideState.OFF or state == GuideState.PLACED:
+		_guide_state = state
+		_guide_visual.visible = false
+		return
+	if _guide_state == state:
 		return
 	_guide_state = state
 	match state:
-		GuideState.OFF, GuideState.PLACED:
-			_guide_visual.visible = false
 		GuideState.TARGET:
 			_guide_visual.visible = true
 			_apply_guide_material(AssemblySettings.GUIDE_COLOR_TARGET)

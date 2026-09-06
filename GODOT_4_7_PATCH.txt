@@ -1,0 +1,7 @@
+Godot 4.7 compatibility patch for bundled Godot XR Tools 4.5.1
+
+Patched two _property_get_revert methods to explicitly return Variant/null on all code paths:
+- addons/godot-xr-tools/functions/function_teleport.gd
+- addons/godot-xr-tools/objects/viewport_2d_in_3d.gd
+
+This matches the current upstream Godot XR Tools behavior for these methods and avoids Godot 4.7 parser errors.

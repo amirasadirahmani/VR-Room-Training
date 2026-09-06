@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 [ext_resource type="PackedScene" path="res://assets/models/grinder/part_pusher.glb" id="1_model"]
 [ext_resource type="Script" path="res://scripts/assembly/assembly_part.gd" id="2_script"]
+[ext_resource type="Material" path="res://materials/workshop/white_plastic.tres" id="3_surface"]
 [sub_resource type="CapsuleShape3D" id="Shape"]
 radius = 0.052
 height = 0.23
@@ -17,6 +18,7 @@ part_id = &"pusher"
 display_name = "گوشت‌کوب"
 required_step = 6
 score_value = 10
+surface_material = ExtResource("3_surface")
 guide_axis = 3
 guide_offset_m = 0.004
 guide_inner_radius_m = 0.018
