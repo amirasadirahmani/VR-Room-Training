@@ -12,6 +12,11 @@ enum GuideAxis { X_POS, X_NEG, Y_POS, Y_NEG, Z_POS, Z_NEG }
 @export var snap_radius_override_m: float = -1.0
 @export var ready_radius_override_m: float = -1.0
 
+## انیمیشن اتصال مکانیکی: قطعه اول در بیرون محل نصب Align می‌شود و سپس
+## روی این محور به سمت SnapPoint حرکت می‌کند.
+@export var approach_axis_local: Vector3 = Vector3.ZERO
+@export var approach_distance_m: float = 0.0
+
 @export var guide_axis: int = GuideAxis.X_POS
 @export var guide_offset_m: float = 0.0
 @export var guide_inner_radius_m: float = 0.020
@@ -79,10 +84,17 @@ func _attempt_auto_snap(part: AssemblyPart, distance: float) -> void:
 	if AssemblySettings.DEBUG_SNAP_LOGS:
 		print("AUTO SNAP: ", part.part_id, " -> ", socket_id, " distance=", snappedf(distance, 0.001), " m")
 
-	await part.snap_to(snap_point.global_transform)
+	await part.snap_to(snap_point.global_transform, _approach_offset_global())
 	_set_guide_state(GuideState.PLACED)
 	manager.register_correct(part)
 	_snapping = false
+
+
+func _approach_offset_global() -> Vector3:
+	if approach_distance_m <= 0.0 or approach_axis_local.length_squared() < 0.000001:
+		return Vector3.ZERO
+	var axis_global := global_transform.basis * approach_axis_local.normalized()
+	return axis_global * approach_distance_m
 
 func _update_debug_area_radius() -> void:
 	if collision_shape == null or collision_shape.shape == null:

@@ -40,6 +40,7 @@ var _name_visible: bool = false
 var _name_tween: Tween = null
 var _snap_clearance: bool = false
 var _snap_in_progress: bool = false
+var _mating_collision_exceptions: Array[PhysicsBody3D] = []
 var _initial_transform: Transform3D
 var _last_safe_transform: Transform3D
 var _last_move_pos: Vector3
@@ -85,7 +86,7 @@ func _process(delta: float) -> void:
 	_update_move_sound()
 
 func _physics_process(_delta: float) -> void:
-	if not is_picked_up() or _snap_clearance or _snap_in_progress:
+	if not is_picked_up() or _snap_in_progress:
 		_last_safe_transform = global_transform
 		return
 
@@ -136,11 +137,45 @@ func let_go(by: Node3D, p_linear_velocity: Vector3, p_angular_velocity: Vector3)
 		collision_mask = AssemblySettings.PART_NORMAL_MASK
 
 func set_snap_clearance(enabled_clearance: bool) -> void:
+	if _snap_clearance == enabled_clearance:
+		return
 	_snap_clearance = enabled_clearance
-	if is_picked_up():
-		collision_mask = 0 if enabled_clearance else AssemblySettings.PART_HELD_MASK
 
-func snap_to(target: Transform3D) -> void:
+	# نکته مهم: برای اتصال مجاز دیگر Collision Mask را صفر نمی‌کنیم.
+	# بنابراین قطعه همچنان به میز، دیوار، بدن و قطعات اشتباه برخورد می‌کند.
+	if is_picked_up():
+		collision_mask = AssemblySettings.PART_HELD_MASK
+
+	if enabled_clearance and AssemblySettings.USE_SELECTIVE_MATING_CLEARANCE:
+		_enable_legal_mating_exceptions()
+	else:
+		_clear_legal_mating_exceptions()
+
+func _enable_legal_mating_exceptions() -> void:
+	_clear_legal_mating_exceptions()
+
+	# بدنه اصلی/فیکسچر مونتاژ فقط در محدوده Socket مجاز نادیده گرفته می‌شود.
+	for node in get_tree().get_nodes_in_group("assembly_mating_obstacles"):
+		var body := node as PhysicsBody3D
+		if body != null and body != self:
+			add_collision_exception_with(body)
+			_mating_collision_exceptions.append(body)
+
+	# قطعاتی که قبلاً صحیح نصب شده‌اند نیز فقط برای قطعه مرحله فعلی
+	# clearance می‌گیرند؛ مثلاً Plate می‌تواند روی محور Auger برود.
+	for node in get_tree().get_nodes_in_group("assembly_parts"):
+		var other := node as AssemblyPart
+		if other != null and other != self and other.is_placed:
+			add_collision_exception_with(other)
+			_mating_collision_exceptions.append(other)
+
+func _clear_legal_mating_exceptions() -> void:
+	for body in _mating_collision_exceptions:
+		if is_instance_valid(body):
+			remove_collision_exception_with(body)
+	_mating_collision_exceptions.clear()
+
+func snap_to(target: Transform3D, approach_offset_global: Vector3 = Vector3.ZERO) -> void:
 	if is_placed:
 		return
 
@@ -156,16 +191,30 @@ func snap_to(target: Transform3D) -> void:
 	angular_velocity = Vector3.ZERO
 	freeze = true
 	enabled = false
-	collision_mask = 0
-
-	var duration := AssemblySettings.SNAP_DURATION_S
-	if snap_duration_override >= 0.0:
-		duration = snap_duration_override
+	collision_layer = AssemblySettings.LAYER_PARTS
+	collision_mask = AssemblySettings.PART_NORMAL_MASK
 
 	var tween := create_tween()
 	tween.set_trans(Tween.TRANS_QUAD)
 	tween.set_ease(Tween.EASE_OUT)
-	tween.tween_property(self, "global_transform", target, duration)
+
+	if approach_offset_global.length_squared() > 0.000001:
+		var approach := target
+		approach.origin += approach_offset_global
+		var align_duration := AssemblySettings.SNAP_ALIGN_DURATION_S
+		var insert_duration := AssemblySettings.SNAP_INSERT_DURATION_S
+		if snap_duration_override >= 0.0:
+			align_duration = snap_duration_override * 0.40
+			insert_duration = snap_duration_override * 0.60
+
+		# مرحله ۱: قطعه روبروی محور مکانیکی Align می‌شود.
+		tween.tween_property(self, "global_transform", approach, align_duration)
+		# مرحله ۲: روی همان محور به عمق واقعی محل نصب Insert می‌شود.
+		tween.tween_property(self, "global_transform", target, insert_duration)
+	else:
+		var duration := snap_duration_override if snap_duration_override >= 0.0 else AssemblySettings.SNAP_DURATION_S
+		tween.tween_property(self, "global_transform", target, duration)
+
 	await tween.finished
 
 	global_transform = target
@@ -175,7 +224,7 @@ func snap_to(target: Transform3D) -> void:
 	freeze = true
 	is_placed = true
 	_snap_in_progress = false
-	_snap_clearance = false
+	set_snap_clearance(false)
 	collision_layer = AssemblySettings.LAYER_PARTS
 	collision_mask = AssemblySettings.PART_NORMAL_MASK
 	set_guide_placed()
@@ -187,6 +236,7 @@ func reset_part() -> void:
 		drop()
 	is_placed = false
 	wrong_attempts = 0
+	_clear_legal_mating_exceptions()
 	_snap_clearance = false
 	_snap_in_progress = false
 	enabled = true

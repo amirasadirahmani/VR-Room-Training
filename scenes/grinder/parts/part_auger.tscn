@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/assembly/assembly_part.gd" id="2_script"]
 [ext_resource type="Material" path="res://materials/workshop/stainless_brushed.tres" id="3_surface"]
 [sub_resource type="BoxShape3D" id="Shape"]
-size = Vector3(0.32, 0.115, 0.115)
+size = Vector3(0.31, 0.105, 0.105)
 [node name="PartAuger" type="RigidBody3D"]
 collision_layer = 4
 collision_mask = 15

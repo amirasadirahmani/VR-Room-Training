@@ -2,7 +2,7 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://fx6vkf1r45ai"
+uid="uid://77denn8euif4"
 path.s3tc="res://.godot/imported/concrete_floor_arm.png-bdf3da2d267c408cf1a21575672702f3.s3tc.ctex"
 path.etc2="res://.godot/imported/concrete_floor_arm.png-bdf3da2d267c408cf1a21575672702f3.etc2.ctex"
 metadata={
@@ -27,8 +27,8 @@ compress/normal_map=0
 compress/channel_pack=0
 mipmaps/generate=true
 mipmaps/limit=-1
-roughness/mode=8
-roughness/src_normal="res://assets/textures/workshop/concrete_floor_normal.png"
+roughness/mode=0
+roughness/src_normal=""
 process/channel_remap/red=0
 process/channel_remap/green=1
 process/channel_remap/blue=2

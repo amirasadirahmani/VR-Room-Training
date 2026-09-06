@@ -32,7 +32,7 @@ radius = 0.18
 
 [node name="MeatGrinderAssembly" type="Node3D"]
 
-[node name="GrinderBase" type="StaticBody3D" parent="."]
+[node name="GrinderBase" type="StaticBody3D" parent="." groups=["assembly_mating_obstacles"]]
 rotation_degrees = Vector3(0, 180, 0)
 collision_layer = 1
 collision_mask = 4
@@ -74,6 +74,8 @@ socket_id = &"socket_auger"
 expected_part_id = &"auger"
 required_step = 1
 manager_path = NodePath("../../AssemblyManager")
+approach_axis_local = Vector3(1, 0, 0)
+approach_distance_m = 0.070
 guide_axis = 1
 guide_offset_m = 0.018
 guide_inner_radius_m = 0.052
@@ -93,6 +95,8 @@ socket_id = &"socket_blade"
 expected_part_id = &"blade"
 required_step = 2
 manager_path = NodePath("../../AssemblyManager")
+approach_axis_local = Vector3(1, 0, 0)
+approach_distance_m = 0.050
 guide_axis = 1
 guide_offset_m = 0.016
 guide_inner_radius_m = 0.013
@@ -112,6 +116,8 @@ socket_id = &"socket_plate"
 expected_part_id = &"plate"
 required_step = 3
 manager_path = NodePath("../../AssemblyManager")
+approach_axis_local = Vector3(1, 0, 0)
+approach_distance_m = 0.045
 guide_axis = 1
 guide_offset_m = 0.016
 guide_inner_radius_m = 0.048
@@ -131,6 +137,8 @@ socket_id = &"socket_lock_ring"
 expected_part_id = &"lock_ring"
 required_step = 4
 manager_path = NodePath("../../AssemblyManager")
+approach_axis_local = Vector3(1, 0, 0)
+approach_distance_m = 0.050
 guide_axis = 1
 guide_offset_m = 0.018
 guide_inner_radius_m = 0.070
@@ -150,6 +158,8 @@ socket_id = &"socket_hopper_tray"
 expected_part_id = &"hopper_tray"
 required_step = 5
 manager_path = NodePath("../../AssemblyManager")
+approach_axis_local = Vector3(0, 1, 0)
+approach_distance_m = 0.060
 guide_axis = 2
 guide_offset_m = 0.018
 guide_inner_radius_m = 0.046
@@ -159,7 +169,7 @@ shape = SubResource("SocketSphereLarge")
 [node name="SnapPoint" type="Node3D" parent="SnapSockets/SocketHopperTray"]
 
 [node name="SocketPusher" type="Area3D" parent="SnapSockets"]
-position = Vector3(0, 0.648, 0)
+position = Vector3(0, 0.585, 0)
 collision_layer = 0
 collision_mask = 4
 monitoring = true
@@ -168,6 +178,8 @@ socket_id = &"socket_pusher"
 expected_part_id = &"pusher"
 required_step = 6
 manager_path = NodePath("../../AssemblyManager")
+approach_axis_local = Vector3(0, 1, 0)
+approach_distance_m = 0.080
 guide_axis = 2
 guide_offset_m = 0.020
 guide_inner_radius_m = 0.024
