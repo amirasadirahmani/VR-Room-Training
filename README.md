@@ -1,6 +1,6 @@
 # VR Room Training — Meat Grinder Assembly
 
-Current milestone: **Phase 6 — Complete Training Loop**
+Current milestone: **Phase 7 — Visual & Interaction Polish**
 
 - OpenXR / Meta XR Simulator
 - Mechanical assembly fit
@@ -10,33 +10,10 @@ Current milestone: **Phase 6 — Complete Training Loop**
 - Full reset and completion result
 - Audio feedback + Quest haptic hooks
 - PBR workshop materials
+- Professional workshop dressing and part staging
+- Quest-conscious lighting polish
+- Immediate green-zone auto-snap preserved
 
-See `PHASE_6_TRAINING_LOOP_FA.md` for test flow.
+See `PHASE_7_VISUAL_POLISH_FA.md` for the Phase 7 test flow.
 
 Godot 4.7 + OpenXR training prototype for Meta Quest 3 / Meta XR Simulator.
-
-## Core flow
-
-1. Auger
-2. Blade
-3. Perforated plate
-4. Lock ring
-5. Hopper tray
-6. Pusher
-
-## Modes
-
-- Guided Training
-- Free Practice
-- Reset Assembly
-
-## Simulator controls used during development
-
-- WASD: move
-- Arrow keys: view rotation
-- U: grip / grab
-- Space: reset controller poses
-
-## Snap tuning
-
-Edit `scripts/assembly/assembly_settings.gd`.

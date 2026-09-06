@@ -1,0 +1,355 @@
+[gd_scene load_steps=30 format=3]
+
+[ext_resource type="Material" path="res://materials/workshop/rubber_dark.tres" id="1_rubber"]
+[ext_resource type="Material" path="res://materials/workshop/hazard_yellow.tres" id="2_hazard"]
+[ext_resource type="Material" path="res://materials/workshop/safety_red.tres" id="3_red"]
+[ext_resource type="Material" path="res://materials/workshop/tool_dark.tres" id="4_tool"]
+[ext_resource type="Material" path="res://materials/workshop/storage_blue.tres" id="5_blue"]
+[ext_resource type="Material" path="res://materials/workshop/pegboard_dark.tres" id="6_peg"]
+[ext_resource type="Material" path="res://materials/workshop/emissive_panel.tres" id="7_light"]
+[ext_resource type="Material" path="res://materials/workshop/label_plate.tres" id="8_plate"]
+[ext_resource type="Material" path="res://materials/workshop/stainless_brushed.tres" id="9_stainless"]
+[ext_resource type="Material" path="res://materials/workshop/painted_steel.tres" id="10_painted"]
+
+[sub_resource type="BoxMesh" id="SafetyLong"]
+size = Vector3(3.10, 0.008, 0.035)
+material = ExtResource("2_hazard")
+[sub_resource type="BoxMesh" id="SafetyShort"]
+size = Vector3(0.035, 0.008, 1.52)
+material = ExtResource("2_hazard")
+[sub_resource type="BoxMesh" id="StagingPad"]
+size = Vector3(0.19, 0.008, 0.18)
+material = ExtResource("1_rubber")
+[sub_resource type="BoxMesh" id="AssemblyPad"]
+size = Vector3(0.60, 0.010, 0.42)
+material = ExtResource("1_rubber")
+[sub_resource type="BoxMesh" id="PegBoard"]
+size = Vector3(1.18, 0.72, 0.035)
+material = ExtResource("6_peg")
+[sub_resource type="CylinderMesh" id="ToolShaft"]
+top_radius = 0.012
+bottom_radius = 0.012
+height = 0.36
+radial_segments = 10
+material = ExtResource("4_tool")
+[sub_resource type="BoxMesh" id="ToolHead"]
+size = Vector3(0.16, 0.055, 0.035)
+material = ExtResource("9_stainless")
+[sub_resource type="BoxMesh" id="ToolHandle"]
+size = Vector3(0.065, 0.14, 0.045)
+material = ExtResource("3_red")
+[sub_resource type="BoxMesh" id="Bin"]
+size = Vector3(0.32, 0.20, 0.32)
+material = ExtResource("5_blue")
+[sub_resource type="BoxMesh" id="FixtureBody"]
+size = Vector3(1.45, 0.055, 0.28)
+material = ExtResource("10_painted")
+[sub_resource type="BoxMesh" id="FixtureGlow"]
+size = Vector3(1.20, 0.014, 0.16)
+material = ExtResource("7_light")
+[sub_resource type="CylinderMesh" id="ExtBody"]
+top_radius = 0.085
+bottom_radius = 0.085
+height = 0.42
+radial_segments = 16
+material = ExtResource("3_red")
+[sub_resource type="CylinderMesh" id="ExtHose"]
+top_radius = 0.012
+bottom_radius = 0.012
+height = 0.30
+radial_segments = 8
+material = ExtResource("4_tool")
+[sub_resource type="BoxMesh" id="Plaque"]
+size = Vector3(0.58, 0.16, 0.025)
+material = ExtResource("8_plate")
+[sub_resource type="BoxMesh" id="BaseboardLong"]
+size = Vector3(6.35, 0.15, 0.035)
+material = ExtResource("10_painted")
+[sub_resource type="BoxMesh" id="BaseboardSide"]
+size = Vector3(0.035, 0.15, 6.15)
+material = ExtResource("10_painted")
+[sub_resource type="BoxMesh" id="CabinetHandle"]
+size = Vector3(0.36, 0.025, 0.025)
+material = ExtResource("9_stainless")
+[sub_resource type="BoxMesh" id="Conduit"]
+size = Vector3(0.045, 0.70, 0.035)
+material = ExtResource("9_stainless")
+[sub_resource type="BoxMesh" id="PowerBox"]
+size = Vector3(0.24, 0.34, 0.05)
+material = ExtResource("10_painted")
+
+[node name="WorkshopPolish" type="Node3D"]
+
+[node name="SafetyPerimeter" type="Node3D" parent="."]
+[node name="Front" type="MeshInstance3D" parent="SafetyPerimeter"]
+position = Vector3(0, 0.008, -0.42)
+mesh = SubResource("SafetyLong")
+[node name="Back" type="MeshInstance3D" parent="SafetyPerimeter"]
+position = Vector3(0, 0.008, -1.88)
+mesh = SubResource("SafetyLong")
+[node name="Left" type="MeshInstance3D" parent="SafetyPerimeter"]
+position = Vector3(-1.53, 0.008, -1.15)
+mesh = SubResource("SafetyShort")
+[node name="Right" type="MeshInstance3D" parent="SafetyPerimeter"]
+position = Vector3(1.53, 0.008, -1.15)
+mesh = SubResource("SafetyShort")
+
+[node name="AssemblyPad" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.817, -1.31)
+mesh = SubResource("AssemblyPad")
+
+[node name="PartStaging" type="Node3D" parent="."]
+[node name="Pad1" type="MeshInstance3D" parent="PartStaging"]
+position = Vector3(-0.780, 0.817, -0.82)
+mesh = SubResource("StagingPad")
+[node name="Label1" type="Label3D" parent="PartStaging"]
+position = Vector3(-0.780, 0.827, -0.70)
+rotation_degrees = Vector3(-90, 0, 0)
+text = "۱\nمارپیچ"
+font_size = 18
+pixel_size = 0.00115
+outline_size = 4
+modulate = Color(0.82, 0.88, 0.92, 1)
+[node name="Pad2" type="MeshInstance3D" parent="PartStaging"]
+position = Vector3(-0.490, 0.817, -0.82)
+mesh = SubResource("StagingPad")
+[node name="Label2" type="Label3D" parent="PartStaging"]
+position = Vector3(-0.490, 0.827, -0.70)
+rotation_degrees = Vector3(-90, 0, 0)
+text = "۲\nتیغه"
+font_size = 18
+pixel_size = 0.00115
+outline_size = 4
+modulate = Color(0.82, 0.88, 0.92, 1)
+[node name="Pad3" type="MeshInstance3D" parent="PartStaging"]
+position = Vector3(-0.250, 0.817, -0.82)
+mesh = SubResource("StagingPad")
+[node name="Label3" type="Label3D" parent="PartStaging"]
+position = Vector3(-0.250, 0.827, -0.70)
+rotation_degrees = Vector3(-90, 0, 0)
+text = "۳\nصفحه"
+font_size = 18
+pixel_size = 0.00115
+outline_size = 4
+modulate = Color(0.82, 0.88, 0.92, 1)
+[node name="Pad4" type="MeshInstance3D" parent="PartStaging"]
+position = Vector3(0.000, 0.817, -0.82)
+mesh = SubResource("StagingPad")
+[node name="Label4" type="Label3D" parent="PartStaging"]
+position = Vector3(0.000, 0.827, -0.70)
+rotation_degrees = Vector3(-90, 0, 0)
+text = "۴\nقفل"
+font_size = 18
+pixel_size = 0.00115
+outline_size = 4
+modulate = Color(0.82, 0.88, 0.92, 1)
+[node name="Pad5" type="MeshInstance3D" parent="PartStaging"]
+position = Vector3(0.380, 0.817, -0.82)
+mesh = SubResource("StagingPad")
+[node name="Label5" type="Label3D" parent="PartStaging"]
+position = Vector3(0.380, 0.827, -0.70)
+rotation_degrees = Vector3(-90, 0, 0)
+text = "۵\nسینی"
+font_size = 18
+pixel_size = 0.00115
+outline_size = 4
+modulate = Color(0.82, 0.88, 0.92, 1)
+[node name="Pad6" type="MeshInstance3D" parent="PartStaging"]
+position = Vector3(0.750, 0.817, -0.82)
+mesh = SubResource("StagingPad")
+[node name="Label6" type="Label3D" parent="PartStaging"]
+position = Vector3(0.750, 0.827, -0.70)
+rotation_degrees = Vector3(-90, 0, 0)
+text = "۶\nگوشت‌کوب"
+font_size = 18
+pixel_size = 0.00115
+outline_size = 4
+modulate = Color(0.82, 0.88, 0.92, 1)
+
+[node name="StationPlaque" type="Node3D" parent="."]
+position = Vector3(0, 0.66, -0.575)
+[node name="Plate" type="MeshInstance3D" parent="StationPlaque"]
+mesh = SubResource("Plaque")
+[node name="Label" type="Label3D" parent="StationPlaque"]
+position = Vector3(0, 0, 0.018)
+text = "STATION 01  •  ASSEMBLY"
+font_size = 16
+pixel_size = 0.00125
+outline_size = 3
+modulate = Color(0.75, 0.90, 1.0, 1)
+
+[node name="ToolPegboard" type="Node3D" parent="."]
+position = Vector3(-2.45, 2.22, -3.285)
+[node name="Board" type="MeshInstance3D" parent="ToolPegboard"]
+mesh = SubResource("PegBoard")
+[node name="Title" type="Label3D" parent="ToolPegboard"]
+position = Vector3(0, 0.27, 0.025)
+text = "TOOL CONTROL"
+font_size = 15
+pixel_size = 0.00125
+outline_size = 3
+modulate = Color(0.70, 0.84, 0.92, 1)
+[node name="Tool1Shaft" type="MeshInstance3D" parent="ToolPegboard"]
+position = Vector3(-0.38, -0.03, 0.035)
+mesh = SubResource("ToolShaft")
+[node name="Tool1Head" type="MeshInstance3D" parent="ToolPegboard"]
+position = Vector3(-0.38, 0.15, 0.035)
+mesh = SubResource("ToolHead")
+[node name="Tool2Shaft" type="MeshInstance3D" parent="ToolPegboard"]
+position = Vector3(-0.12, -0.03, 0.035)
+mesh = SubResource("ToolShaft")
+[node name="Tool2Handle" type="MeshInstance3D" parent="ToolPegboard"]
+position = Vector3(-0.12, -0.18, 0.035)
+mesh = SubResource("ToolHandle")
+[node name="Tool3Shaft" type="MeshInstance3D" parent="ToolPegboard"]
+position = Vector3(0.15, -0.03, 0.035)
+mesh = SubResource("ToolShaft")
+[node name="Tool3Handle" type="MeshInstance3D" parent="ToolPegboard"]
+position = Vector3(0.15, -0.18, 0.035)
+mesh = SubResource("ToolHandle")
+[node name="Tool4Shaft" type="MeshInstance3D" parent="ToolPegboard"]
+position = Vector3(0.4, -0.03, 0.035)
+mesh = SubResource("ToolShaft")
+[node name="Tool4Handle" type="MeshInstance3D" parent="ToolPegboard"]
+position = Vector3(0.4, -0.18, 0.035)
+mesh = SubResource("ToolHandle")
+
+[node name="CabinetDetails" type="Node3D" parent="."]
+[node name="Handle1" type="MeshInstance3D" parent="CabinetDetails"]
+position = Vector3(-2.45, 0.28, -2.298)
+mesh = SubResource("CabinetHandle")
+[node name="Handle2" type="MeshInstance3D" parent="CabinetDetails"]
+position = Vector3(-2.45, 0.58, -2.298)
+mesh = SubResource("CabinetHandle")
+[node name="Handle3" type="MeshInstance3D" parent="CabinetDetails"]
+position = Vector3(-2.45, 0.88, -2.298)
+mesh = SubResource("CabinetHandle")
+[node name="Handle4" type="MeshInstance3D" parent="CabinetDetails"]
+position = Vector3(-2.45, 1.18, -2.298)
+mesh = SubResource("CabinetHandle")
+
+[node name="RackStorage" type="Node3D" parent="."]
+[node name="Bin1" type="MeshInstance3D" parent="RackStorage"]
+position = Vector3(2.02, 0.49, -2.62)
+mesh = SubResource("Bin")
+[node name="Bin1Label" type="Label3D" parent="RackStorage"]
+position = Vector3(2.02, 0.49, -2.445)
+text = "A"
+font_size = 14
+pixel_size = 0.00115
+outline_size = 3
+modulate = Color(0.88, 0.95, 1, 1)
+[node name="Bin2" type="MeshInstance3D" parent="RackStorage"]
+position = Vector3(2.42, 0.49, -2.62)
+mesh = SubResource("Bin")
+[node name="Bin2Label" type="Label3D" parent="RackStorage"]
+position = Vector3(2.42, 0.49, -2.445)
+text = "B"
+font_size = 14
+pixel_size = 0.00115
+outline_size = 3
+modulate = Color(0.88, 0.95, 1, 1)
+[node name="Bin3" type="MeshInstance3D" parent="RackStorage"]
+position = Vector3(2.02, 1.06, -2.62)
+mesh = SubResource("Bin")
+[node name="Bin3Label" type="Label3D" parent="RackStorage"]
+position = Vector3(2.02, 1.06, -2.445)
+text = "C"
+font_size = 14
+pixel_size = 0.00115
+outline_size = 3
+modulate = Color(0.88, 0.95, 1, 1)
+[node name="Bin4" type="MeshInstance3D" parent="RackStorage"]
+position = Vector3(2.42, 1.06, -2.62)
+mesh = SubResource("Bin")
+[node name="Bin4Label" type="Label3D" parent="RackStorage"]
+position = Vector3(2.42, 1.06, -2.445)
+text = "D"
+font_size = 14
+pixel_size = 0.00115
+outline_size = 3
+modulate = Color(0.88, 0.95, 1, 1)
+[node name="Bin5" type="MeshInstance3D" parent="RackStorage"]
+position = Vector3(2.20, 1.62, -2.62)
+mesh = SubResource("Bin")
+[node name="Bin5Label" type="Label3D" parent="RackStorage"]
+position = Vector3(2.20, 1.62, -2.445)
+text = "PPE"
+font_size = 14
+pixel_size = 0.00115
+outline_size = 3
+modulate = Color(0.88, 0.95, 1, 1)
+
+[node name="FireExtinguisher" type="Node3D" parent="."]
+position = Vector3(1.72, 0.36, -3.22)
+[node name="Body" type="MeshInstance3D" parent="FireExtinguisher"]
+mesh = SubResource("ExtBody")
+[node name="Hose" type="MeshInstance3D" parent="FireExtinguisher"]
+position = Vector3(0.10, 0.08, 0)
+rotation_degrees = Vector3(0, 0, 18)
+mesh = SubResource("ExtHose")
+[node name="Label" type="Label3D" parent="FireExtinguisher"]
+position = Vector3(0, 0.31, 0.02)
+text = "FIRE"
+font_size = 13
+pixel_size = 0.00115
+outline_size = 3
+modulate = Color(1, 0.78, 0.72, 1)
+
+[node name="CeilingFixtures" type="Node3D" parent="."]
+[node name="Fixture1" type="MeshInstance3D" parent="CeilingFixtures"]
+position = Vector3(-1.45, 3.08, -1.00)
+mesh = SubResource("FixtureBody")
+[node name="Glow1" type="MeshInstance3D" parent="CeilingFixtures"]
+position = Vector3(-1.45, 3.045, -1.00)
+mesh = SubResource("FixtureGlow")
+[node name="Fixture2" type="MeshInstance3D" parent="CeilingFixtures"]
+position = Vector3(0.00, 3.08, -1.00)
+mesh = SubResource("FixtureBody")
+[node name="Glow2" type="MeshInstance3D" parent="CeilingFixtures"]
+position = Vector3(0.00, 3.045, -1.00)
+mesh = SubResource("FixtureGlow")
+[node name="Fixture3" type="MeshInstance3D" parent="CeilingFixtures"]
+position = Vector3(1.45, 3.08, -1.00)
+mesh = SubResource("FixtureBody")
+[node name="Glow3" type="MeshInstance3D" parent="CeilingFixtures"]
+position = Vector3(1.45, 3.045, -1.00)
+mesh = SubResource("FixtureGlow")
+[node name="Fixture4" type="MeshInstance3D" parent="CeilingFixtures"]
+position = Vector3(-0.75, 3.08, -2.45)
+mesh = SubResource("FixtureBody")
+[node name="Glow4" type="MeshInstance3D" parent="CeilingFixtures"]
+position = Vector3(-0.75, 3.045, -2.45)
+mesh = SubResource("FixtureGlow")
+[node name="Fixture5" type="MeshInstance3D" parent="CeilingFixtures"]
+position = Vector3(0.75, 3.08, -2.45)
+mesh = SubResource("FixtureBody")
+[node name="Glow5" type="MeshInstance3D" parent="CeilingFixtures"]
+position = Vector3(0.75, 3.045, -2.45)
+mesh = SubResource("FixtureGlow")
+
+[node name="WallTrim" type="Node3D" parent="."]
+[node name="Back" type="MeshInstance3D" parent="WallTrim"]
+position = Vector3(0, 0.075, -3.285)
+mesh = SubResource("BaseboardLong")
+[node name="Left" type="MeshInstance3D" parent="WallTrim"]
+position = Vector3(-3.185, 0.075, -0.55)
+mesh = SubResource("BaseboardSide")
+[node name="Right" type="MeshInstance3D" parent="WallTrim"]
+position = Vector3(3.185, 0.075, -0.55)
+mesh = SubResource("BaseboardSide")
+
+[node name="ElectricalDetail" type="Node3D" parent="."]
+[node name="Conduit" type="MeshInstance3D" parent="ElectricalDetail"]
+position = Vector3(-1.80, 1.28, -3.285)
+mesh = SubResource("Conduit")
+[node name="Box" type="MeshInstance3D" parent="ElectricalDetail"]
+position = Vector3(-1.80, 0.90, -3.275)
+mesh = SubResource("PowerBox")
+[node name="BoxLabel" type="Label3D" parent="ElectricalDetail"]
+position = Vector3(-1.80, 0.90, -3.242)
+text = "24V"
+font_size = 12
+pixel_size = 0.0011
+outline_size = 3
+modulate = Color(0.92, 0.72, 0.18, 1)
