@@ -1,4 +1,17 @@
-# VR Meat Grinder Training
+# VR Room Training — Meat Grinder Assembly
+
+Current milestone: **Phase 6 — Complete Training Loop**
+
+- OpenXR / Meta XR Simulator
+- Mechanical assembly fit
+- Training + Free Practice
+- Easy / Normal / Hard
+- Scoring, penalties, timer, accuracy, First Try
+- Full reset and completion result
+- Audio feedback + Quest haptic hooks
+- PBR workshop materials
+
+See `PHASE_6_TRAINING_LOOP_FA.md` for test flow.
 
 Godot 4.7 + OpenXR training prototype for Meta Quest 3 / Meta XR Simulator.
 

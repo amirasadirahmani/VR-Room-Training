@@ -5,14 +5,14 @@
 [ext_resource type="PackedScene" uid="uid://l2n30mpbkdyw" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_hand_low.tscn" id="3_righthand"]
 [ext_resource type="PackedScene" uid="uid://b4ysuy43poobf" path="res://addons/godot-xr-tools/functions/function_pickup.tscn" id="4_pickup"]
 [ext_resource type="PackedScene" path="res://scenes/grinder/meat_grinder_assembly.tscn" id="5_assembly"]
-[ext_resource type="Script" uid="uid://78afdyqw0nk4" path="res://scripts/ui/vr_menu_button.gd" id="6_button"]
+[ext_resource type="Script" uid="uid://bmcug5aqgixd6" path="res://scripts/ui/vr_menu_button.gd" id="6_button"]
 [ext_resource type="Material" path="res://materials/workshop/concrete_floor.tres" id="7_floor_mat"]
 [ext_resource type="Material" path="res://materials/workshop/concrete_wall.tres" id="8_wall_mat"]
 [ext_resource type="Material" path="res://materials/workshop/painted_steel.tres" id="9_painted_steel"]
 [ext_resource type="Material" path="res://materials/workshop/table_steel.tres" id="10_table_steel"]
 [ext_resource type="Material" path="res://materials/workshop/chalkboard.tres" id="11_board_mat"]
 [ext_resource type="Material" path="res://materials/workshop/stainless_brushed.tres" id="12_stainless"]
-[ext_resource type="Script" uid="uid://dn0bm8pd46yxf" path="res://scripts/xr/room_boundary.gd" id="13_boundary"]
+[ext_resource type="Script" uid="uid://jwamh7uisvmb" path="res://scripts/xr/room_boundary.gd" id="13_boundary"]
 
 [sub_resource type="Environment" id="EnvironmentMain"]
 background_mode = 1
@@ -124,19 +124,6 @@ size = Vector3(3.35, 0.055, 0.1)
 material = ExtResource("12_stainless")
 size = Vector3(0.055, 1.42, 0.1)
 
-[sub_resource type="StandardMaterial3D" id="MatAccentBlue"]
-albedo_color = Color(0.1, 0.44, 0.72, 1)
-emission_enabled = true
-emission = Color(0.05, 0.18, 0.32, 1)
-emission_energy_multiplier = 0.55
-
-[sub_resource type="BoxMesh" id="MeshButton"]
-material = SubResource("MatAccentBlue")
-size = Vector3(0.48, 0.15, 0.07)
-
-[sub_resource type="BoxShape3D" id="ShapeButton"]
-size = Vector3(0.54, 0.18, 0.12)
-
 [sub_resource type="StandardMaterial3D" id="MatAccentGreen"]
 albedo_color = Color(0.1, 0.52, 0.35, 1)
 emission_enabled = true
@@ -145,6 +132,19 @@ emission_energy_multiplier = 0.45
 
 [sub_resource type="BoxMesh" id="MeshButtonGreen"]
 material = SubResource("MatAccentGreen")
+size = Vector3(0.48, 0.15, 0.07)
+
+[sub_resource type="BoxShape3D" id="ShapeButton"]
+size = Vector3(0.54, 0.18, 0.12)
+
+[sub_resource type="StandardMaterial3D" id="MatAccentBlue"]
+albedo_color = Color(0.1, 0.44, 0.72, 1)
+emission_enabled = true
+emission = Color(0.05, 0.18, 0.32, 1)
+emission_energy_multiplier = 0.55
+
+[sub_resource type="BoxMesh" id="MeshButton"]
+material = SubResource("MatAccentBlue")
 size = Vector3(0.48, 0.15, 0.07)
 
 [sub_resource type="StandardMaterial3D" id="MatAccentOrange"]
@@ -157,123 +157,123 @@ emission_energy_multiplier = 0.38
 material = SubResource("MatAccentOrange")
 size = Vector3(0.48, 0.15, 0.07)
 
-[node name="Main" type="Node3D" unique_id=1694789205]
+[node name="Main" type="Node3D" unique_id=454698511]
 
-[node name="StartXR" parent="." unique_id=1255602648 instance=ExtResource("1_startxr")]
+[node name="StartXR" parent="." unique_id=1426556374 instance=ExtResource("1_startxr")]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1031207105]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2115230867]
 environment = SubResource("EnvironmentMain")
 
-[node name="XROrigin3D" type="XROrigin3D" parent="." unique_id=382584359]
+[node name="XROrigin3D" type="XROrigin3D" parent="." unique_id=1571896049]
 script = ExtResource("13_boundary")
 
-[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D" unique_id=1970341044]
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D" unique_id=1666739471]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
 far = 100.0
 
-[node name="PlayerBodyCollider" type="AnimatableBody3D" parent="XROrigin3D/XRCamera3D" unique_id=1648206671 groups=["player_body"]]
+[node name="PlayerBodyCollider" type="AnimatableBody3D" parent="XROrigin3D/XRCamera3D" unique_id=1394677964 groups=["player_body"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.72, 0.08)
 collision_layer = 2
 collision_mask = 5
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="XROrigin3D/XRCamera3D/PlayerBodyCollider" unique_id=1069948767]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XROrigin3D/XRCamera3D/PlayerBodyCollider" unique_id=636808342]
 shape = SubResource("ShapePlayerBody")
 
-[node name="left_hand" type="XRController3D" parent="XROrigin3D" unique_id=1007315153]
+[node name="left_hand" type="XRController3D" parent="XROrigin3D" unique_id=1449406992]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 1.25, -0.45)
 tracker = &"left_hand"
 pose = &"grip"
 
-[node name="HandModel" parent="XROrigin3D/left_hand" unique_id=1927291479 instance=ExtResource("2_lefthand")]
+[node name="HandModel" parent="XROrigin3D/left_hand" unique_id=1680874185 instance=ExtResource("2_lefthand")]
 
-[node name="FunctionPickup" parent="XROrigin3D/left_hand" unique_id=712858561 instance=ExtResource("4_pickup")]
+[node name="FunctionPickup" parent="XROrigin3D/left_hand" unique_id=440993169 instance=ExtResource("4_pickup")]
 transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 0, 0)
 grab_distance = 0.22
 ranged_enable = false
 
-[node name="HandCollider" type="AnimatableBody3D" parent="XROrigin3D/left_hand" unique_id=154665534 groups=["vr_hand"]]
+[node name="HandCollider" type="AnimatableBody3D" parent="XROrigin3D/left_hand" unique_id=1530096499 groups=["vr_hand"]]
 collision_layer = 8
 collision_mask = 5
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="XROrigin3D/left_hand/HandCollider" unique_id=1485194285]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XROrigin3D/left_hand/HandCollider" unique_id=1512962979]
 shape = SubResource("ShapeHand")
 
-[node name="right_hand" type="XRController3D" parent="XROrigin3D" unique_id=194503424]
+[node name="right_hand" type="XRController3D" parent="XROrigin3D" unique_id=313583905]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 1.25, -0.45)
 tracker = &"right_hand"
 pose = &"grip"
 
-[node name="HandModel" parent="XROrigin3D/right_hand" unique_id=1872329202 instance=ExtResource("3_righthand")]
+[node name="HandModel" parent="XROrigin3D/right_hand" unique_id=1396815508 instance=ExtResource("3_righthand")]
 
-[node name="FunctionPickup" parent="XROrigin3D/right_hand" unique_id=871135253 instance=ExtResource("4_pickup")]
+[node name="FunctionPickup" parent="XROrigin3D/right_hand" unique_id=473872658 instance=ExtResource("4_pickup")]
 transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 0, 0)
 grab_distance = 0.22
 ranged_enable = false
 
-[node name="HandCollider" type="AnimatableBody3D" parent="XROrigin3D/right_hand" unique_id=1286320708 groups=["vr_hand"]]
+[node name="HandCollider" type="AnimatableBody3D" parent="XROrigin3D/right_hand" unique_id=991993912 groups=["vr_hand"]]
 collision_layer = 8
 collision_mask = 5
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="XROrigin3D/right_hand/HandCollider" unique_id=1623620313]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XROrigin3D/right_hand/HandCollider" unique_id=831718992]
 shape = SubResource("ShapeHand")
 
-[node name="EnvironmentRoot" type="Node3D" parent="." unique_id=1121528955]
+[node name="EnvironmentRoot" type="Node3D" parent="." unique_id=1354086710]
 
-[node name="Floor" type="StaticBody3D" parent="EnvironmentRoot" unique_id=654565811]
+[node name="Floor" type="StaticBody3D" parent="EnvironmentRoot" unique_id=2095555100]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, -1.1)
 collision_mask = 4
 
-[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/Floor" unique_id=1983313825]
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/Floor" unique_id=1206816945]
 mesh = SubResource("MeshFloor")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/Floor" unique_id=340053691]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/Floor" unique_id=193300427]
 shape = SubResource("ShapeFloor")
 
-[node name="BackWall" type="StaticBody3D" parent="EnvironmentRoot" unique_id=1746383144]
+[node name="BackWall" type="StaticBody3D" parent="EnvironmentRoot" unique_id=1382654141]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, -3.35)
 collision_mask = 4
 
-[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/BackWall" unique_id=1292405017]
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/BackWall" unique_id=1888039924]
 mesh = SubResource("MeshBackWall")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/BackWall" unique_id=1611208375]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/BackWall" unique_id=101267481]
 shape = SubResource("ShapeBackWall")
 
-[node name="LeftWall" type="StaticBody3D" parent="EnvironmentRoot" unique_id=1862302477]
+[node name="LeftWall" type="StaticBody3D" parent="EnvironmentRoot" unique_id=186049248]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.25, 1.6, -0.55)
 collision_mask = 4
 
-[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/LeftWall" unique_id=560854018]
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/LeftWall" unique_id=36080258]
 mesh = SubResource("MeshSideWall")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/LeftWall" unique_id=1655190239]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/LeftWall" unique_id=1227635790]
 shape = SubResource("ShapeSideWall")
 
-[node name="RightWall" type="StaticBody3D" parent="EnvironmentRoot" unique_id=1664260647]
+[node name="RightWall" type="StaticBody3D" parent="EnvironmentRoot" unique_id=1587489810]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.25, 1.6, -0.55)
 collision_mask = 4
 
-[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/RightWall" unique_id=1669267366]
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/RightWall" unique_id=2072111755]
 mesh = SubResource("MeshSideWall")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/RightWall" unique_id=438063510]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/RightWall" unique_id=1899223081]
 shape = SubResource("ShapeSideWall")
 
-[node name="WorkshopDoor" type="StaticBody3D" parent="EnvironmentRoot" unique_id=77716411]
+[node name="WorkshopDoor" type="StaticBody3D" parent="EnvironmentRoot" unique_id=1819574908]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.35, 1.08, -3.27)
 collision_mask = 4
 
-[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/WorkshopDoor" unique_id=157059779]
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/WorkshopDoor" unique_id=1848331544]
 mesh = SubResource("MeshDoor")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/WorkshopDoor" unique_id=1181853542]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/WorkshopDoor" unique_id=1964613355]
 shape = SubResource("ShapeDoor")
 
-[node name="Handle" type="MeshInstance3D" parent="EnvironmentRoot/WorkshopDoor" unique_id=894265185]
+[node name="Handle" type="MeshInstance3D" parent="EnvironmentRoot/WorkshopDoor" unique_id=2014635425]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.36, 0, 0.075)
 mesh = SubResource("MeshDoorHandle")
 
-[node name="Label" type="Label3D" parent="EnvironmentRoot/WorkshopDoor" unique_id=702432669]
+[node name="Label" type="Label3D" parent="EnvironmentRoot/WorkshopDoor" unique_id=1322652221]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0.075)
 pixel_size = 0.0015
 modulate = Color(0.8, 0.9, 0.96, 1)
@@ -281,163 +281,163 @@ text = "WORKSHOP"
 font_size = 20
 outline_size = 4
 
-[node name="Ceiling" type="StaticBody3D" parent="EnvironmentRoot" unique_id=1586283845]
+[node name="Ceiling" type="StaticBody3D" parent="EnvironmentRoot" unique_id=150707620]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.15, -0.55)
 collision_mask = 4
 
-[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/Ceiling" unique_id=1809207762]
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/Ceiling" unique_id=528644664]
 mesh = SubResource("MeshCeiling")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/Ceiling" unique_id=2054432400]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/Ceiling" unique_id=2089014938]
 shape = SubResource("ShapeCeiling")
 
-[node name="TrainingTable" type="StaticBody3D" parent="EnvironmentRoot" unique_id=1965002735]
+[node name="TrainingTable" type="StaticBody3D" parent="EnvironmentRoot" unique_id=1748463853]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -1.15)
 collision_mask = 4
 
-[node name="Top" type="MeshInstance3D" parent="EnvironmentRoot/TrainingTable" unique_id=1556620593]
+[node name="Top" type="MeshInstance3D" parent="EnvironmentRoot/TrainingTable" unique_id=900373819]
 mesh = SubResource("MeshTableTop")
 
-[node name="TopCollision" type="CollisionShape3D" parent="EnvironmentRoot/TrainingTable" unique_id=545641460]
+[node name="TopCollision" type="CollisionShape3D" parent="EnvironmentRoot/TrainingTable" unique_id=1483060151]
 shape = SubResource("ShapeTableTop")
 
-[node name="LegFL" type="MeshInstance3D" parent="EnvironmentRoot/TrainingTable" unique_id=930486873]
+[node name="LegFL" type="MeshInstance3D" parent="EnvironmentRoot/TrainingTable" unique_id=46777237]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.08, -0.43, 0.42)
 mesh = SubResource("MeshLeg")
 
-[node name="LegFLCollision" type="CollisionShape3D" parent="EnvironmentRoot/TrainingTable" unique_id=381067644]
+[node name="LegFLCollision" type="CollisionShape3D" parent="EnvironmentRoot/TrainingTable" unique_id=1334775381]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.08, -0.43, 0.42)
 shape = SubResource("ShapeLeg")
 
-[node name="LegFR" type="MeshInstance3D" parent="EnvironmentRoot/TrainingTable" unique_id=1916590441]
+[node name="LegFR" type="MeshInstance3D" parent="EnvironmentRoot/TrainingTable" unique_id=1383542659]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.08, -0.43, 0.42)
 mesh = SubResource("MeshLeg")
 
-[node name="LegFRCollision" type="CollisionShape3D" parent="EnvironmentRoot/TrainingTable" unique_id=1543757569]
+[node name="LegFRCollision" type="CollisionShape3D" parent="EnvironmentRoot/TrainingTable" unique_id=174593657]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.08, -0.43, 0.42)
 shape = SubResource("ShapeLeg")
 
-[node name="LegBL" type="MeshInstance3D" parent="EnvironmentRoot/TrainingTable" unique_id=1749203495]
+[node name="LegBL" type="MeshInstance3D" parent="EnvironmentRoot/TrainingTable" unique_id=1132582335]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.08, -0.43, -0.42)
 mesh = SubResource("MeshLeg")
 
-[node name="LegBLCollision" type="CollisionShape3D" parent="EnvironmentRoot/TrainingTable" unique_id=171693945]
+[node name="LegBLCollision" type="CollisionShape3D" parent="EnvironmentRoot/TrainingTable" unique_id=947780261]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.08, -0.43, -0.42)
 shape = SubResource("ShapeLeg")
 
-[node name="LegBR" type="MeshInstance3D" parent="EnvironmentRoot/TrainingTable" unique_id=1860456812]
+[node name="LegBR" type="MeshInstance3D" parent="EnvironmentRoot/TrainingTable" unique_id=1537398240]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.08, -0.43, -0.42)
 mesh = SubResource("MeshLeg")
 
-[node name="LegBRCollision" type="CollisionShape3D" parent="EnvironmentRoot/TrainingTable" unique_id=378937246]
+[node name="LegBRCollision" type="CollisionShape3D" parent="EnvironmentRoot/TrainingTable" unique_id=1054096278]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.08, -0.43, -0.42)
 shape = SubResource("ShapeLeg")
 
-[node name="LowerShelf" type="MeshInstance3D" parent="EnvironmentRoot/TrainingTable" unique_id=1918857639]
+[node name="LowerShelf" type="MeshInstance3D" parent="EnvironmentRoot/TrainingTable" unique_id=1611640812]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.57, 0)
 mesh = SubResource("MeshShelf")
 
-[node name="LowerShelfCollision" type="CollisionShape3D" parent="EnvironmentRoot/TrainingTable" unique_id=2038745001]
+[node name="LowerShelfCollision" type="CollisionShape3D" parent="EnvironmentRoot/TrainingTable" unique_id=1417072886]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.57, 0)
 shape = SubResource("ShapeShelf")
 
-[node name="LeftCabinet" type="StaticBody3D" parent="EnvironmentRoot" unique_id=1725212470]
+[node name="LeftCabinet" type="StaticBody3D" parent="EnvironmentRoot" unique_id=144954350]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.45, 0.78, -2.55)
 collision_mask = 4
 
-[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/LeftCabinet" unique_id=903860811]
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/LeftCabinet" unique_id=74876158]
 mesh = SubResource("MeshCabinet")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/LeftCabinet" unique_id=2063613562]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/LeftCabinet" unique_id=1331660152]
 shape = SubResource("ShapeCabinet")
 
-[node name="CabinetLabel" type="Label3D" parent="EnvironmentRoot/LeftCabinet" unique_id=1238966201]
+[node name="CabinetLabel" type="Label3D" parent="EnvironmentRoot/LeftCabinet" unique_id=162100882]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0.255)
 pixel_size = 0.0016
 text = "ابزار"
 font_size = 22
 outline_size = 4
 
-[node name="RightRack" type="Node3D" parent="EnvironmentRoot" unique_id=1453986024]
+[node name="RightRack" type="Node3D" parent="EnvironmentRoot" unique_id=347190018]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0.9, -2.65)
 
-[node name="PostL" type="StaticBody3D" parent="EnvironmentRoot/RightRack" unique_id=790825310]
+[node name="PostL" type="StaticBody3D" parent="EnvironmentRoot/RightRack" unique_id=1046503603]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.62, 0, 0)
 collision_mask = 4
 
-[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/RightRack/PostL" unique_id=547132669]
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/RightRack/PostL" unique_id=1822896740]
 mesh = SubResource("MeshRackPost")
 
-[node name="Collision" type="CollisionShape3D" parent="EnvironmentRoot/RightRack/PostL" unique_id=144081906]
+[node name="Collision" type="CollisionShape3D" parent="EnvironmentRoot/RightRack/PostL" unique_id=564482054]
 shape = SubResource("ShapeRackPost")
 
-[node name="PostR" type="StaticBody3D" parent="EnvironmentRoot/RightRack" unique_id=754020594]
+[node name="PostR" type="StaticBody3D" parent="EnvironmentRoot/RightRack" unique_id=1690176071]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62, 0, 0)
 collision_mask = 4
 
-[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/RightRack/PostR" unique_id=1536890201]
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/RightRack/PostR" unique_id=231992993]
 mesh = SubResource("MeshRackPost")
 
-[node name="Collision" type="CollisionShape3D" parent="EnvironmentRoot/RightRack/PostR" unique_id=1789298981]
+[node name="Collision" type="CollisionShape3D" parent="EnvironmentRoot/RightRack/PostR" unique_id=709687842]
 shape = SubResource("ShapeRackPost")
 
-[node name="Shelf1" type="StaticBody3D" parent="EnvironmentRoot/RightRack" unique_id=738177046]
+[node name="Shelf1" type="StaticBody3D" parent="EnvironmentRoot/RightRack" unique_id=523478469]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.55, 0)
 collision_mask = 4
 
-[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/RightRack/Shelf1" unique_id=1169659172]
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/RightRack/Shelf1" unique_id=1794284242]
 mesh = SubResource("MeshRackShelf")
 
-[node name="Collision" type="CollisionShape3D" parent="EnvironmentRoot/RightRack/Shelf1" unique_id=278810051]
+[node name="Collision" type="CollisionShape3D" parent="EnvironmentRoot/RightRack/Shelf1" unique_id=247261178]
 shape = SubResource("ShapeRackShelf")
 
-[node name="Shelf2" type="StaticBody3D" parent="EnvironmentRoot/RightRack" unique_id=1847398914]
+[node name="Shelf2" type="StaticBody3D" parent="EnvironmentRoot/RightRack" unique_id=1788282491]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
 collision_mask = 4
 
-[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/RightRack/Shelf2" unique_id=1558442277]
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/RightRack/Shelf2" unique_id=141384745]
 mesh = SubResource("MeshRackShelf")
 
-[node name="Collision" type="CollisionShape3D" parent="EnvironmentRoot/RightRack/Shelf2" unique_id=1241377629]
+[node name="Collision" type="CollisionShape3D" parent="EnvironmentRoot/RightRack/Shelf2" unique_id=545671858]
 shape = SubResource("ShapeRackShelf")
 
-[node name="Shelf3" type="StaticBody3D" parent="EnvironmentRoot/RightRack" unique_id=1909046496]
+[node name="Shelf3" type="StaticBody3D" parent="EnvironmentRoot/RightRack" unique_id=885251898]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58, 0)
 collision_mask = 4
 
-[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/RightRack/Shelf3" unique_id=1269134869]
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/RightRack/Shelf3" unique_id=108208666]
 mesh = SubResource("MeshRackShelf")
 
-[node name="Collision" type="CollisionShape3D" parent="EnvironmentRoot/RightRack/Shelf3" unique_id=1813753719]
+[node name="Collision" type="CollisionShape3D" parent="EnvironmentRoot/RightRack/Shelf3" unique_id=1760838024]
 shape = SubResource("ShapeRackShelf")
 
-[node name="InstructionBoard" type="StaticBody3D" parent="EnvironmentRoot" unique_id=1515658917]
+[node name="InstructionBoard" type="StaticBody3D" parent="EnvironmentRoot" unique_id=1000397996]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.78, -3.27)
 collision_mask = 4
 
-[node name="Board" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard" unique_id=1707957102]
+[node name="Board" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard" unique_id=1663342777]
 mesh = SubResource("MeshBoard")
 
-[node name="Collision" type="CollisionShape3D" parent="EnvironmentRoot/InstructionBoard" unique_id=631195819]
+[node name="Collision" type="CollisionShape3D" parent="EnvironmentRoot/InstructionBoard" unique_id=222951583]
 shape = SubResource("ShapeBoard")
 
-[node name="FrameTop" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard" unique_id=2128075865]
+[node name="FrameTop" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard" unique_id=1719730632]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0.015)
 mesh = SubResource("MeshBoardFrameH")
 
-[node name="FrameBottom" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard" unique_id=1823629391]
+[node name="FrameBottom" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard" unique_id=1263086580]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7, 0.015)
 mesh = SubResource("MeshBoardFrameH")
 
-[node name="FrameLeft" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard" unique_id=2053976403]
+[node name="FrameLeft" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard" unique_id=249216815]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.66, 0, 0.015)
 mesh = SubResource("MeshBoardFrameV")
 
-[node name="FrameRight" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard" unique_id=37002611]
+[node name="FrameRight" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard" unique_id=1230304743]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.66, 0, 0.015)
 mesh = SubResource("MeshBoardFrameV")
 
-[node name="Title" type="Label3D" parent="EnvironmentRoot/InstructionBoard" unique_id=1355360498]
+[node name="Title" type="Label3D" parent="EnvironmentRoot/InstructionBoard" unique_id=974464223]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.72, 0.5, 0.05)
 pixel_size = 0.00165
 modulate = Color(0.62, 0.88, 1, 1)
@@ -445,7 +445,7 @@ text = "ایستگاه آموزش مونتاژ چرخ‌گوشت"
 font_size = 30
 outline_size = 4
 
-[node name="ModeLabel" type="Label3D" parent="EnvironmentRoot/InstructionBoard" unique_id=959487856]
+[node name="ModeLabel" type="Label3D" parent="EnvironmentRoot/InstructionBoard" unique_id=1488891980]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.22, 0.3, 0.05)
 pixel_size = 0.00155
 modulate = Color(0.48, 0.82, 1, 1)
@@ -453,7 +453,7 @@ text = "آموزش مرحله‌ای"
 font_size = 21
 outline_size = 4
 
-[node name="StepLabel" type="Label3D" parent="EnvironmentRoot/InstructionBoard" unique_id=1609941187]
+[node name="StepLabel" type="Label3D" parent="EnvironmentRoot/InstructionBoard" unique_id=1405877754]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.38, 0.3, 0.05)
 pixel_size = 0.00155
 modulate = Color(0.94, 0.94, 0.98, 1)
@@ -461,7 +461,7 @@ text = "مرحله ۱ از ۶"
 font_size = 21
 outline_size = 4
 
-[node name="TutorialLabel" type="Label3D" parent="EnvironmentRoot/InstructionBoard" unique_id=1324185884]
+[node name="TutorialLabel" type="Label3D" parent="EnvironmentRoot/InstructionBoard" unique_id=873380841]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, -0.02, 0.05)
 pixel_size = 0.0015
 modulate = Color(0.96, 0.97, 0.99, 1)
@@ -470,14 +470,14 @@ text = "مارپیچ را بردار
 font_size = 23
 outline_size = 5
 
-[node name="FeedbackLabel" type="Label3D" parent="EnvironmentRoot/InstructionBoard" unique_id=1758472218]
+[node name="FeedbackLabel" type="Label3D" parent="EnvironmentRoot/InstructionBoard" unique_id=373093321]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, -0.44, 0.055)
 pixel_size = 0.00155
 modulate = Color(0.3, 1, 0.5, 0)
 font_size = 22
 outline_size = 5
 
-[node name="ScoreLabel" type="Label3D" parent="EnvironmentRoot/InstructionBoard" unique_id=394948678]
+[node name="ScoreLabel" type="Label3D" parent="EnvironmentRoot/InstructionBoard" unique_id=892082640]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.3, 0.05)
 pixel_size = 0.00155
 modulate = Color(0.4, 1, 0.6, 1)
@@ -485,14 +485,14 @@ text = "امتیاز  0"
 font_size = 22
 outline_size = 4
 
-[node name="TimeLabel" type="Label3D" parent="EnvironmentRoot/InstructionBoard" unique_id=1056416060]
+[node name="TimeLabel" type="Label3D" parent="EnvironmentRoot/InstructionBoard" unique_id=379362750]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.08, 0.05)
 pixel_size = 0.00145
 text = "زمان  00:00"
 font_size = 20
 outline_size = 4
 
-[node name="MistakesLabel" type="Label3D" parent="EnvironmentRoot/InstructionBoard" unique_id=989313021]
+[node name="MistakesLabel" type="Label3D" parent="EnvironmentRoot/InstructionBoard" unique_id=835618784]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, -0.13, 0.05)
 pixel_size = 0.00145
 modulate = Color(1, 0.68, 0.34, 1)
@@ -500,37 +500,136 @@ text = "خطا  0"
 font_size = 20
 outline_size = 4
 
-[node name="MenuPanel" type="Node3D" parent="EnvironmentRoot/InstructionBoard" unique_id=439031216]
+[node name="AccuracyLabel" type="Label3D" parent="EnvironmentRoot/InstructionBoard" unique_id=1987338813]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, -0.34, 0.05)
+pixel_size = 0.0014
+modulate = Color(0.62, 0.9, 1, 1)
+text = "دقت  100%"
+font_size = 19
+outline_size = 4
+
+[node name="DifficultyLabel" type="Label3D" parent="EnvironmentRoot/InstructionBoard" unique_id=1365271174]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, -0.54, 0.05)
+pixel_size = 0.00135
+modulate = Color(0.78, 0.88, 1, 1)
+text = "سختی  معمولی"
+font_size = 18
+outline_size = 4
+
+[node name="DifficultyPanel" type="Node3D" parent="EnvironmentRoot/InstructionBoard" unique_id=1557966379]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, 0.47, 0.065)
+
+[node name="Title" type="Label3D" parent="EnvironmentRoot/InstructionBoard/DifficultyPanel" unique_id=614821546]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.07, 0.02)
+pixel_size = 0.0012
+modulate = Color(0.8, 0.9, 1, 1)
+text = "سختی"
+font_size = 14
+outline_size = 4
+
+[node name="EasyButton" type="Area3D" parent="EnvironmentRoot/InstructionBoard/DifficultyPanel" unique_id=593031331]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.34, -0.08, 0)
+collision_layer = 16
+collision_mask = 8
+script = ExtResource("6_button")
+action = "difficulty_easy"
+manager_path = NodePath("../../../../MeatGrinderAssembly/AssemblyManager")
+hover_radius_m = 0.18
+
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard/DifficultyPanel/EasyButton" unique_id=1847708517]
+transform = Transform3D(0.6, 0, 0, 0, 0.78, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("MeshButtonGreen")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/InstructionBoard/DifficultyPanel/EasyButton" unique_id=2108513712]
+transform = Transform3D(0.6, 0, 0, 0, 0.78, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("ShapeButton")
+
+[node name="Label" type="Label3D" parent="EnvironmentRoot/InstructionBoard/DifficultyPanel/EasyButton" unique_id=1664964581]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.045)
+pixel_size = 0.0012
+text = "آسان"
+font_size = 14
+outline_size = 3
+
+[node name="NormalButton" type="Area3D" parent="EnvironmentRoot/InstructionBoard/DifficultyPanel" unique_id=1116568702]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.08, 0)
+collision_layer = 16
+collision_mask = 8
+script = ExtResource("6_button")
+action = "difficulty_normal"
+manager_path = NodePath("../../../../MeatGrinderAssembly/AssemblyManager")
+hover_radius_m = 0.18
+
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard/DifficultyPanel/NormalButton" unique_id=647868679]
+transform = Transform3D(0.6, 0, 0, 0, 0.78, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("MeshButton")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/InstructionBoard/DifficultyPanel/NormalButton" unique_id=278178838]
+transform = Transform3D(0.6, 0, 0, 0, 0.78, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("ShapeButton")
+
+[node name="Label" type="Label3D" parent="EnvironmentRoot/InstructionBoard/DifficultyPanel/NormalButton" unique_id=136756569]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.045)
+pixel_size = 0.00115
+text = "معمولی"
+font_size = 13
+outline_size = 3
+
+[node name="HardButton" type="Area3D" parent="EnvironmentRoot/InstructionBoard/DifficultyPanel" unique_id=1997169397]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.34, -0.08, 0)
+collision_layer = 16
+collision_mask = 8
+script = ExtResource("6_button")
+action = "difficulty_hard"
+manager_path = NodePath("../../../../MeatGrinderAssembly/AssemblyManager")
+hover_radius_m = 0.18
+
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard/DifficultyPanel/HardButton" unique_id=563389213]
+transform = Transform3D(0.6, 0, 0, 0, 0.78, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("MeshButtonOrange")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/InstructionBoard/DifficultyPanel/HardButton" unique_id=1051384636]
+transform = Transform3D(0.6, 0, 0, 0, 0.78, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("ShapeButton")
+
+[node name="Label" type="Label3D" parent="EnvironmentRoot/InstructionBoard/DifficultyPanel/HardButton" unique_id=145070755]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.045)
+pixel_size = 0.0012
+text = "سخت"
+font_size = 14
+outline_size = 3
+
+[node name="MenuPanel" type="Node3D" parent="EnvironmentRoot/InstructionBoard" unique_id=154762324]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, -0.17, 0.065)
 
-[node name="MenuTitle" type="Label3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel" unique_id=2002188389]
+[node name="MenuTitle" type="Label3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel" unique_id=1680432879]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, 0.02)
 pixel_size = 0.00128
 text = "حالت اجرا — دست را نزدیک کن و U بزن"
 font_size = 16
 outline_size = 4
 
-[node name="TrainingButton" type="Area3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel" unique_id=1925079976]
+[node name="TrainingButton" type="Area3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel" unique_id=1412231205]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
 collision_layer = 16
 collision_mask = 8
 script = ExtResource("6_button")
 manager_path = NodePath("../../../../MeatGrinderAssembly/AssemblyManager")
 
-[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/TrainingButton" unique_id=1908540991]
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/TrainingButton" unique_id=77338723]
 mesh = SubResource("MeshButton")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/TrainingButton" unique_id=1745214267]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/TrainingButton" unique_id=1713363443]
 shape = SubResource("ShapeButton")
 
-[node name="Label" type="Label3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/TrainingButton" unique_id=782903171]
+[node name="Label" type="Label3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/TrainingButton" unique_id=1533321204]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.045)
 pixel_size = 0.00145
 text = "آموزش"
 font_size = 18
 outline_size = 4
 
-[node name="FreeButton" type="Area3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel" unique_id=1732714147]
+[node name="FreeButton" type="Area3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel" unique_id=502755531]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.06, 0)
 collision_layer = 16
 collision_mask = 8
@@ -538,20 +637,20 @@ script = ExtResource("6_button")
 action = "free_practice"
 manager_path = NodePath("../../../../MeatGrinderAssembly/AssemblyManager")
 
-[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/FreeButton" unique_id=1033365757]
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/FreeButton" unique_id=1625268711]
 mesh = SubResource("MeshButtonGreen")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/FreeButton" unique_id=523560253]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/FreeButton" unique_id=1281020517]
 shape = SubResource("ShapeButton")
 
-[node name="Label" type="Label3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/FreeButton" unique_id=534223729]
+[node name="Label" type="Label3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/FreeButton" unique_id=950835]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.045)
 pixel_size = 0.0014
 text = "تمرین آزاد"
 font_size = 17
 outline_size = 4
 
-[node name="ResetButton" type="Area3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel" unique_id=1129431533]
+[node name="ResetButton" type="Area3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel" unique_id=625060157]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.27, 0)
 collision_layer = 16
 collision_mask = 8
@@ -559,27 +658,96 @@ script = ExtResource("6_button")
 action = "reset"
 manager_path = NodePath("../../../../MeatGrinderAssembly/AssemblyManager")
 
-[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/ResetButton" unique_id=379543372]
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/ResetButton" unique_id=2036687686]
 mesh = SubResource("MeshButtonOrange")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/ResetButton" unique_id=109285359]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/ResetButton" unique_id=1257316010]
 shape = SubResource("ShapeButton")
 
-[node name="Label" type="Label3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/ResetButton" unique_id=765399274]
+[node name="Label" type="Label3D" parent="EnvironmentRoot/InstructionBoard/MenuPanel/ResetButton" unique_id=1457538874]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.045)
 pixel_size = 0.0014
 text = "شروع مجدد"
 font_size = 17
 outline_size = 4
 
-[node name="SafetyPoster" type="Node3D" parent="EnvironmentRoot" unique_id=1699799421]
+[node name="ResultPanel" type="Node3D" parent="EnvironmentRoot/InstructionBoard" unique_id=46637764]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.48, -0.04, 0.095)
+visible = false
+
+[node name="Background" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard/ResultPanel" unique_id=1339440942]
+transform = Transform3D(0.64, 0, 0, 0, 0.68, 0, 0, 0, 0.45, 0, 0, 0)
+mesh = SubResource("MeshBoard")
+
+[node name="ResultTitle" type="Label3D" parent="EnvironmentRoot/InstructionBoard/ResultPanel" unique_id=1817154158]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.34, 0.05)
+pixel_size = 0.00155
+modulate = Color(0.45, 1, 0.66, 1)
+text = "نتیجه آموزش"
+font_size = 27
+outline_size = 5
+
+[node name="SummaryBody" type="Label3D" parent="EnvironmentRoot/InstructionBoard/ResultPanel" unique_id=2000108153]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0.05)
+pixel_size = 0.00138
+modulate = Color(0.95, 0.98, 1, 1)
+font_size = 19
+outline_size = 4
+
+[node name="RestartButton" type="Area3D" parent="EnvironmentRoot/InstructionBoard/ResultPanel" unique_id=312482879]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, -0.37, 0.055)
+collision_layer = 16
+collision_mask = 8
+script = ExtResource("6_button")
+action = "restart"
+manager_path = NodePath("../../../../MeatGrinderAssembly/AssemblyManager")
+
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard/ResultPanel/RestartButton" unique_id=1576111190]
+transform = Transform3D(0.88, 0, 0, 0, 0.9, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("MeshButtonGreen")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/InstructionBoard/ResultPanel/RestartButton" unique_id=647154731]
+transform = Transform3D(0.88, 0, 0, 0, 0.9, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("ShapeButton")
+
+[node name="Label" type="Label3D" parent="EnvironmentRoot/InstructionBoard/ResultPanel/RestartButton" unique_id=13404843]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.045)
+pixel_size = 0.00132
+text = "تکرار"
+font_size = 16
+outline_size = 4
+
+[node name="MainMenuButton" type="Area3D" parent="EnvironmentRoot/InstructionBoard/ResultPanel" unique_id=125308335]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -0.37, 0.055)
+collision_layer = 16
+collision_mask = 8
+script = ExtResource("6_button")
+action = "main_menu"
+manager_path = NodePath("../../../../MeatGrinderAssembly/AssemblyManager")
+
+[node name="Mesh" type="MeshInstance3D" parent="EnvironmentRoot/InstructionBoard/ResultPanel/MainMenuButton" unique_id=82642744]
+transform = Transform3D(0.88, 0, 0, 0, 0.9, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("MeshButtonOrange")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnvironmentRoot/InstructionBoard/ResultPanel/MainMenuButton" unique_id=1839518967]
+transform = Transform3D(0.88, 0, 0, 0, 0.9, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("ShapeButton")
+
+[node name="Label" type="Label3D" parent="EnvironmentRoot/InstructionBoard/ResultPanel/MainMenuButton" unique_id=659319411]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.045)
+pixel_size = 0.00128
+text = "منوی اصلی"
+font_size = 15
+outline_size = 4
+
+[node name="SafetyPoster" type="Node3D" parent="EnvironmentRoot" unique_id=2090790849]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3, 1.95, -3.25)
 
-[node name="Panel" type="MeshInstance3D" parent="EnvironmentRoot/SafetyPoster" unique_id=705868683]
+[node name="Panel" type="MeshInstance3D" parent="EnvironmentRoot/SafetyPoster" unique_id=4662295]
 transform = Transform3D(1, 0, 0, 0, 2.4, 0, 0, 0, 0.7, 0, 0, 0)
 mesh = SubResource("MeshButtonOrange")
 
-[node name="Label" type="Label3D" parent="EnvironmentRoot/SafetyPoster" unique_id=1089224131]
+[node name="Label" type="Label3D" parent="EnvironmentRoot/SafetyPoster" unique_id=927048698]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.06)
 pixel_size = 0.00135
 text = "ایمنی کارگاه
@@ -587,26 +755,26 @@ text = "ایمنی کارگاه
 font_size = 18
 outline_size = 4
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="EnvironmentRoot" unique_id=1656132948]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="EnvironmentRoot" unique_id=197149999]
 transform = Transform3D(0.92718387, 0.31768438, -0.19851124, 0, 0.52991927, 0.8480481, 0.37460658, -0.7862965, 0.4913326, 0, 0, 0)
 light_energy = 0.75
 shadow_enabled = true
 
-[node name="KeyLight" type="OmniLight3D" parent="EnvironmentRoot" unique_id=662765187]
+[node name="KeyLight" type="OmniLight3D" parent="EnvironmentRoot" unique_id=878519341]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 2.55, -0.85)
 light_energy = 1.65
 omni_range = 4.5
 
-[node name="FillLight" type="OmniLight3D" parent="EnvironmentRoot" unique_id=1586811132]
+[node name="FillLight" type="OmniLight3D" parent="EnvironmentRoot" unique_id=1129756588]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 2.1, -1.5)
 light_energy = 0.85
 omni_range = 3.8
 
-[node name="BoardLight" type="SpotLight3D" parent="EnvironmentRoot" unique_id=1111941022]
+[node name="BoardLight" type="SpotLight3D" parent="EnvironmentRoot" unique_id=2021607017]
 transform = Transform3D(1, 0, 0, 0, 0.88294756, 0.46947157, 0, -0.46947157, 0.88294756, 0, 2.75, -2.25)
 light_energy = 1.25
 spot_range = 3.0
 spot_angle = 46.0
 
-[node name="MeatGrinderAssembly" parent="." unique_id=441326918 instance=ExtResource("5_assembly")]
+[node name="MeatGrinderAssembly" parent="." unique_id=1638520208 instance=ExtResource("5_assembly")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.732, -1.15)

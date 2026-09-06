@@ -1,13 +1,23 @@
 class_name VRMenuButton3D
 extends Area3D
 
-## 3D workshop menu button.
-## In Meta XR Simulator, U drives the OpenXR `grip` action.
-## The button is selected by hand proximity, then activated on a fresh Grip press.
+## 3D menu button.
+## In Meta XR Simulator, U maps to the OpenXR Grip action.
+## Move a hand near a button, then make a fresh Grip/U press.
 
-@export_enum("training", "free_practice", "reset") var action: String = "training"
+@export_enum(
+	"training",
+	"free_practice",
+	"reset",
+	"restart",
+	"main_menu",
+	"difficulty_easy",
+	"difficulty_normal",
+	"difficulty_hard"
+) var action: String = "training"
+
 @export var manager_path: NodePath
-@export var cooldown_s: float = 0.65
+@export var cooldown_s: float = 0.55
 @export var hover_radius_m: float = 0.22
 @export var grip_threshold: float = 0.55
 @export var grip_action: StringName = &"grip"
@@ -21,6 +31,7 @@ var _base_mesh_scale: Vector3 = Vector3.ONE
 var _base_label_scale: Vector3 = Vector3.ONE
 var _base_label_text: String = ""
 var _base_label_color: Color = Color.WHITE
+var _click_audio: AudioStreamPlayer3D
 
 @onready var manager: AssemblyManager = get_node_or_null(manager_path) as AssemblyManager
 @onready var mesh: MeshInstance3D = get_node_or_null("Mesh") as MeshInstance3D
@@ -35,13 +46,19 @@ func _ready() -> void:
 		_base_label_text = label.text
 		_base_label_color = label.modulate
 
+	_click_audio = AudioStreamPlayer3D.new()
+	_click_audio.name = "MenuClick"
+	_click_audio.stream = load("res://assets/audio/menu_click.wav")
+	_click_audio.volume_db = -7.0
+	_click_audio.max_distance = 4.0
+	add_child(_click_audio)
+
 func _process(delta: float) -> void:
 	_cooldown = maxf(0.0, _cooldown - delta)
 
 	var hover_hand := _get_hover_hand()
 	_set_hovered(hover_hand != null)
 
-	# Track Grip state continuously so a new press is required while hovering.
 	for controller in _controllers():
 		var key := controller.get_instance_id()
 		var down := _controller_grip_down(controller)
@@ -52,6 +69,8 @@ func _process(delta: float) -> void:
 				_activate()
 
 		_grip_previous[key] = down
+
+	_update_selected_visual()
 
 func _controllers() -> Array[XRController3D]:
 	var result: Array[XRController3D] = []
@@ -80,12 +99,11 @@ func _get_hover_hand() -> Node3D:
 		if distance > hover_radius_m:
 			continue
 
-		# Only the nearest menu button to this hand is allowed to react.
 		var nearest_button: VRMenuButton3D = null
 		var nearest_button_distance := INF
 		for button_node in get_tree().get_nodes_in_group("vr_menu_button"):
 			var button := button_node as VRMenuButton3D
-			if button == null:
+			if button == null or not button.is_visible_in_tree():
 				continue
 			var button_distance := button.global_position.distance_to(hand.global_position)
 			if button_distance < nearest_button_distance:
@@ -109,6 +127,11 @@ func _activate() -> void:
 	_cooldown = cooldown_s
 	_pulse()
 
+	if _click_audio and _click_audio.stream:
+		_click_audio.stop()
+		_click_audio.play()
+	manager.menu_haptic()
+
 	match action:
 		"training":
 			manager.start_training()
@@ -116,6 +139,16 @@ func _activate() -> void:
 			manager.start_free_practice()
 		"reset":
 			manager.reset_assembly()
+		"restart":
+			manager.restart_current_mode()
+		"main_menu":
+			manager.show_main_menu()
+		"difficulty_easy":
+			manager.set_difficulty_easy()
+		"difficulty_normal":
+			manager.set_difficulty_normal()
+		"difficulty_hard":
+			manager.set_difficulty_hard()
 
 func _set_hovered(value: bool) -> void:
 	if _hovered == value:
@@ -134,12 +167,14 @@ func _set_hovered(value: bool) -> void:
 		label.text = ("[U]  " + _base_label_text) if value else _base_label_text
 		var target_label_scale := _base_label_scale * (1.08 if value else 1.0)
 		_visual_tween.tween_property(label, "scale", target_label_scale, 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-		_visual_tween.tween_property(
-			label,
-			"modulate",
-			Color(1.0, 0.92, 0.48, 1.0) if value else _base_label_color,
-			0.12
-		)
+
+func _update_selected_visual() -> void:
+	if label == null or manager == null or _hovered:
+		return
+	if manager.is_menu_action_selected(action):
+		label.modulate = Color(0.55, 1.0, 0.72, 1.0)
+	else:
+		label.modulate = _base_label_color
 
 func _pulse() -> void:
 	if mesh == null:
