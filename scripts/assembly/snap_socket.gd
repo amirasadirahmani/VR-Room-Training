@@ -25,6 +25,7 @@ enum GuideAxis { X_POS, X_NEG, Y_POS, Y_NEG, Z_POS, Z_NEG }
 var _snapping: bool = false
 var _guide_visual: MeshInstance3D = null
 var _guide_state: int = GuideState.OFF
+var _drop_fallback_connected: bool = false
 
 @onready var manager: AssemblyManager = get_node_or_null(manager_path) as AssemblyManager
 @onready var snap_point: Node3D = get_node(snap_point_path) as Node3D
@@ -33,6 +34,9 @@ var _guide_state: int = GuideState.OFF
 func _ready() -> void:
 	_setup_guide_visual()
 	_update_debug_area_radius()
+	# همه قطعات بعد از ساخت Scene در گروه assembly_parts ثبت می‌شوند.
+	# اتصال deferred باعث می‌شود fallback رها کردن قطعه در محدوده سبز هم همیشه آماده باشد.
+	call_deferred("_connect_drop_fallback")
 
 func _physics_process(_delta: float) -> void:
 	if _snapping:
@@ -47,18 +51,23 @@ func _physics_process(_delta: float) -> void:
 		_set_guide_state(GuideState.OFF)
 		return
 
+	if not _drop_fallback_connected:
+		_connect_drop_fallback()
+
 	var distance := part.global_position.distance_to(snap_point.global_position)
 	if distance <= _ready_radius():
+		# قانون UX: سبز شدن یعنی اتصال قطعی. کاربر نباید لازم باشد قطعه را رها کند.
 		_set_guide_state(GuideState.READY)
 		part.set_guide_ready()
 		part.set_snap_clearance(true)
-	else:
-		_set_guide_state(GuideState.TARGET)
-		part.set_guide_target()
-		part.set_snap_clearance(false)
 
-	if AssemblySettings.AUTO_SNAP_ENABLED and distance <= _snap_radius():
-		_attempt_auto_snap(part, distance)
+		if AssemblySettings.AUTO_SNAP_ENABLED:
+			_attempt_auto_snap(part, distance)
+		return
+
+	_set_guide_state(GuideState.TARGET)
+	part.set_guide_target()
+	part.set_snap_clearance(false)
 
 func _find_expected_part() -> AssemblyPart:
 	for node in get_tree().get_nodes_in_group("assembly_parts"):
@@ -76,6 +85,7 @@ func _ready_radius() -> float:
 func _attempt_auto_snap(part: AssemblyPart, distance: float) -> void:
 	if _snapping or part.is_placed or manager == null or not manager.can_place(part.part_id):
 		return
+
 	_snapping = true
 	_set_guide_state(GuideState.READY)
 	part.set_guide_ready()
@@ -89,6 +99,29 @@ func _attempt_auto_snap(part: AssemblyPart, distance: float) -> void:
 	manager.register_correct(part)
 	_snapping = false
 
+func _connect_drop_fallback() -> void:
+	if _drop_fallback_connected:
+		return
+	var part := _find_expected_part()
+	if part == null:
+		return
+	if not part.dropped.is_connected(_on_expected_part_dropped):
+		part.dropped.connect(_on_expected_part_dropped)
+	_drop_fallback_connected = true
+
+func _on_expected_part_dropped(_pickable: XRToolsPickable) -> void:
+	# Safety net: اگر به هر دلیل auto-snap همان فریم اجرا نشد، رها کردن قطعه
+	# داخل محدوده سبز نباید باعث افتادن آن روی زمین شود.
+	if _snapping or manager == null or not manager.is_socket_active(expected_part_id):
+		return
+
+	var part := _find_expected_part()
+	if part == null or part.is_placed or not manager.can_place(part.part_id):
+		return
+
+	var distance := part.global_position.distance_to(snap_point.global_position)
+	if distance <= _ready_radius():
+		_attempt_auto_snap(part, distance)
 
 func _approach_offset_global() -> Vector3:
 	if approach_distance_m <= 0.0 or approach_axis_local.length_squared() < 0.000001:
