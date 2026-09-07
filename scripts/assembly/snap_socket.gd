@@ -11,18 +11,22 @@ enum GuideAxis { X_POS, X_NEG, Y_POS, Y_NEG, Z_POS, Z_NEG }
 @export var snap_point_path: NodePath = ^"SnapPoint"
 @export var snap_radius_override_m: float = -1.0
 @export var ready_radius_override_m: float = -1.0
+
+## انیمیشن اتصال مکانیکی: قطعه اول در بیرون محل نصب Align می‌شود و سپس
+## روی این محور به سمت SnapPoint حرکت می‌کند.
 @export var approach_axis_local: Vector3 = Vector3.ZERO
 @export var approach_distance_m: float = 0.0
+
 @export var guide_axis: int = GuideAxis.X_POS
 @export var guide_offset_m: float = 0.0
 @export var guide_inner_radius_m: float = 0.020
 @export var guide_outer_radius_m: float = 0.028
 
-var _snapping := false
-var _guide_visual: MeshInstance3D
+var _snapping: bool = false
+var _guide_visual: MeshInstance3D = null
 var _guide_state: int = GuideState.OFF
-var _was_ready := false
-var _drop_fallback_connected := false
+var _was_ready: bool = false
+var _drop_fallback_connected: bool = false
 
 @onready var manager: AssemblyManager = get_node_or_null(manager_path) as AssemblyManager
 @onready var snap_point: Node3D = get_node(snap_point_path) as Node3D
@@ -37,17 +41,21 @@ func _ready() -> void:
 func _physics_process(_delta: float) -> void:
 	if _snapping:
 		return
+
 	if manager == null or not manager.is_socket_active(expected_part_id):
 		_was_ready = false
 		_set_guide_state(GuideState.OFF)
 		return
+
 	var part := _find_expected_part()
 	if part == null or part.is_placed:
 		_was_ready = false
 		_set_guide_state(GuideState.OFF)
 		return
+
 	if not _drop_fallback_connected:
 		_connect_drop_fallback()
+
 	var distance := part.global_position.distance_to(snap_point.global_position)
 	var ready_now := distance <= _ready_radius()
 	if ready_now:
@@ -57,12 +65,20 @@ func _physics_process(_delta: float) -> void:
 		if not _was_ready and manager:
 			manager.notify_snap_ready(part)
 		_was_ready = true
+
+		# Phase 7 keeps the proven UX contract: GREEN means the part is accepted.
+		# Auto-snap starts immediately; the user does not need to release Grip/U.
 		if AssemblySettings.AUTO_SNAP_ENABLED:
 			_attempt_auto_snap(part, distance)
 		return
+
 	_was_ready = false
-	_set_guide_state(GuideState.TARGET)
-	part.set_guide_target()
+	if manager != null and manager.has_method("show_target_guides") and not manager.show_target_guides():
+		_set_guide_state(GuideState.OFF)
+		part.set_guide_off()
+	else:
+		_set_guide_state(GuideState.TARGET)
+		part.set_guide_target()
 	part.set_snap_clearance(false)
 
 func reset_socket() -> void:
@@ -81,6 +97,7 @@ func _connect_drop_fallback() -> void:
 	_drop_fallback_connected = true
 
 func _on_expected_part_dropped(_pickable: XRToolsPickable) -> void:
+	# Safety net: if auto-snap misses a frame, a release while green still snaps.
 	if _snapping or manager == null or not manager.is_socket_active(expected_part_id):
 		return
 	var part := _find_expected_part()
@@ -110,17 +127,21 @@ func _attempt_auto_snap(part: AssemblyPart, distance: float) -> void:
 	_set_guide_state(GuideState.READY)
 	part.set_guide_ready()
 	part.set_snap_clearance(true)
+
 	if AssemblySettings.DEBUG_SNAP_LOGS:
 		print("AUTO SNAP: ", part.part_id, " -> ", socket_id, " distance=", snappedf(distance, 0.001), " m")
+
 	await part.snap_to(snap_point.global_transform, _approach_offset_global())
 	_set_guide_state(GuideState.PLACED)
 	manager.register_correct(part)
 	_snapping = false
 
+
 func _approach_offset_global() -> Vector3:
 	if approach_distance_m <= 0.0 or approach_axis_local.length_squared() < 0.000001:
 		return Vector3.ZERO
-	return (global_transform.basis * approach_axis_local.normalized()) * approach_distance_m
+	var axis_global := global_transform.basis * approach_axis_local.normalized()
+	return axis_global * approach_distance_m
 
 func _update_debug_area_radius() -> void:
 	if collision_shape == null or collision_shape.shape == null:
@@ -157,13 +178,17 @@ func _guide_axis_vector() -> Vector3:
 
 func _guide_axis_rotation() -> Vector3:
 	match guide_axis:
-		GuideAxis.X_POS, GuideAxis.X_NEG: return Vector3(0.0, 0.0, deg_to_rad(90.0))
-		GuideAxis.Z_POS, GuideAxis.Z_NEG: return Vector3(deg_to_rad(90.0), 0.0, 0.0)
-		_: return Vector3.ZERO
+		GuideAxis.X_POS, GuideAxis.X_NEG:
+			return Vector3(0.0, 0.0, deg_to_rad(90.0))
+		GuideAxis.Z_POS, GuideAxis.Z_NEG:
+			return Vector3(deg_to_rad(90.0), 0.0, 0.0)
+		_:
+			return Vector3.ZERO
 
 func _set_guide_state(state: int) -> void:
 	if _guide_visual == null:
 		return
+	# OFF/PLACED must always win, even if another frame just repainted the guide.
 	if state == GuideState.OFF or state == GuideState.PLACED:
 		_guide_state = state
 		_guide_visual.visible = false
