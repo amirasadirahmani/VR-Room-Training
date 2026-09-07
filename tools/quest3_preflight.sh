@@ -13,8 +13,20 @@ require_grep(){ local p="$1" f="$2" label="$3"; grep -Fq "$p" "$f" && ok "$label
 [[ -d "$ROOT/addons/godotopenxrvendors" ]] && ok "OpenXR Vendors installed" || fail "OpenXR Vendors missing — run ./tools/install_openxr_vendors_5_1.sh"
 [[ -d "$ROOT/android/build" ]] && ok "Gradle Android template installed" || fail "android/build missing — run ./tools/quest3_prepare.sh"
 
+require_grep 'run/main_scene="res://main.tscn"' "$ROOT/project.godot" "Path-based main scene for clean fresh-clone export"
 require_grep 'renderer/rendering_method="mobile"' "$ROOT/project.godot" "Mobile renderer retained"
 require_grep 'openxr/enabled=true' "$ROOT/project.godot" "OpenXR enabled"
+require_grep 'export_filter="resources"' "$ROOT/export_presets.cfg" "Production-only resource export enabled"
+require_grep 'res://main.tscn' "$ROOT/export_presets.cfg" "Main scene selected for export"
+require_grep 'res://openxr_action_map.tres' "$ROOT/export_presets.cfg" "OpenXR action map selected for export"
+require_grep 'res://scenes/environment/workshop_polish.tscn' "$ROOT/export_presets.cfg" "Dynamic workshop polish selected for export"
+require_grep 'res://scenes/ui/scenario_panel.tscn' "$ROOT/export_presets.cfg" "Dynamic scenario panel selected for export"
+require_grep 'res://scenes/grinder/parts/part_handle.tscn' "$ROOT/export_presets.cfg" "Dynamic handle selected for export"
+require_grep 'res://scenes/grinder/parts/part_motor_unit.tscn' "$ROOT/export_presets.cfg" "Dynamic motor unit selected for export"
+require_grep 'res://scenes/grinder/parts/part_sausage_attachment.tscn' "$ROOT/export_presets.cfg" "Dynamic sausage attachment selected for export"
+require_grep 'res://assets/audio/score.wav' "$ROOT/export_presets.cfg" "Dynamic manager audio selected for export"
+require_grep 'res://assets/audio/pickup.wav' "$ROOT/export_presets.cfg" "Dynamic part audio selected for export"
+require_grep 'res://assets/audio/menu_click.wav' "$ROOT/export_presets.cfg" "Dynamic menu audio selected for export"
 require_grep 'gradle_build/use_gradle_build=true' "$ROOT/export_presets.cfg" "Gradle export enabled"
 require_grep 'gradle_build/min_sdk="32"' "$ROOT/export_presets.cfg" "minSdk 32"
 require_grep 'gradle_build/target_sdk="34"' "$ROOT/export_presets.cfg" "targetSdk 34"
@@ -53,4 +65,4 @@ if (( FAIL )); then
   exit 1
 fi
 
-echo "Preflight PASSED. Ready for debug APK export."
+echo "Preflight PASSED. Ready for Quest 3 APK export."
