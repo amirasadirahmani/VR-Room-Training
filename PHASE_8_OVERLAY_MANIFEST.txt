@@ -1,0 +1,11 @@
+Phase 8 Overlay v4-final
+- Scenario/challenge system
+- Godot 4.7 parser hotfix
+- Scenario panel position/accessibility fix
+- Audible/working menu interaction fix
+- Full-surface hover support
+- Global exclusive hover arbitration: one hovered button at a time
+- Increased scenario-button spacing / reduced hover overlap
+- Sausage assembly order corrected: Lock Ring before Sausage Attachment
+- GREEN = immediate Auto-Snap contract preserved
+- No workshop textures are included or replaced
