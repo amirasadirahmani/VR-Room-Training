@@ -1,0 +1,15 @@
+Phase 9 cumulative overlay
+- Includes all final Phase 8 parser/panel/menu/hover/sausage-order fixes
+- PASS/FAIL assessment
+- Grades A/B/C/F
+- Quality score independent of timed bonus
+- Persistent records per Scenario + Difficulty
+- Per-step error breakdown
+- New-record feedback
+- Timed challenge assessment / timeout fail
+- Free Practice remains non-certified
+- Snap-clearance cleanup on inactive/reset sockets
+- No workshop textures included or replaced
+- VR-fair accuracy + deduplicated drop/wrong-pick mistakes
+- First valid run creates a baseline record
+- Result record section split into RTL-safe multi-line layout

@@ -8,6 +8,13 @@ export.cfg
 export_credentials.cfg
 *.tmp
 
+# Generated Android / Quest build artifacts
+android/
+builds/
+
+# OpenXR Vendors is installed reproducibly by tools/install_openxr_vendors_5_1.sh
+addons/godotopenxrvendors/
+
 # Imported translations (automatically generated from CSV files)
 *.translation
 

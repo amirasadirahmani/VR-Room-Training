@@ -44,6 +44,9 @@ func _physics_process(_delta: float) -> void:
 
 	if manager == null or not manager.is_socket_active(expected_part_id):
 		_was_ready = false
+		var inactive_part: AssemblyPart = _find_expected_part()
+		if inactive_part != null and not inactive_part.is_placed:
+			inactive_part.set_snap_clearance(false)
 		_set_guide_state(GuideState.OFF)
 		return
 
@@ -84,6 +87,9 @@ func _physics_process(_delta: float) -> void:
 func reset_socket() -> void:
 	_snapping = false
 	_was_ready = false
+	var part: AssemblyPart = _find_expected_part()
+	if part != null and not part.is_placed:
+		part.set_snap_clearance(false)
 	_set_guide_state(GuideState.OFF)
 
 func _connect_drop_fallback() -> void:

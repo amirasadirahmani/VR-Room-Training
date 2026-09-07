@@ -9,6 +9,12 @@ enum Mode { TRAINING, FREE_PRACTICE }
 enum SessionState { MENU, RUNNING, COMPLETE, FAILED }
 enum Scenario { MANUAL, ELECTRIC, SAUSAGE, TIMED }
 
+const AssessmentStoreScript = preload("res://scripts/assessment/assessment_store.gd")
+const PASS_MIN_ACCURACY: int = 75
+const PASS_MIN_QUALITY_SCORE: int = 70
+const TIMED_GRADE_A_MAX_S: float = 60.0
+const TIMED_GRADE_B_MAX_S: float = 75.0
+
 @export var score_label_path: NodePath
 @export var tutorial_label_path: NodePath
 @export var step_label_path: NodePath
@@ -43,6 +49,14 @@ var elapsed_time: float = 0.0
 var timed_bonus: int = 0
 
 var _step_errors: int = 0
+var _wrong_pick_by_step: Dictionary = {}
+var _wrong_pick_seen: Dictionary = {}
+var _drop_by_step: Dictionary = {}
+var _assessment_passed: bool = false
+var _assessment_grade: String = "—"
+var _assessment_finalized: bool = false
+var _record_snapshot: Dictionary = {}
+var result_title: Label3D = null
 var _score_audio: AudioStreamPlayer
 var _error_audio: AudioStreamPlayer
 var _complete_audio: AudioStreamPlayer
@@ -64,6 +78,7 @@ var _feedback_tween: Tween
 func _ready() -> void:
 	add_to_group("assembly_manager")
 	_setup_audio()
+	_setup_assessment_ui()
 	_ensure_scenario_panel()
 	_ensure_optional_parts_and_sockets()
 	AssemblySettings.apply_difficulty(AssemblySettings.Difficulty.NORMAL)
@@ -120,26 +135,43 @@ func notify_part_picked(part: AssemblyPart) -> void:
 	focus_part_id = part.part_id
 	_haptic_all(0.10, 0.035)
 	if mode == Mode.TRAINING and part.part_id != expected_part_id():
-		mistakes += 1
-		_step_errors += 1
-		score = max(0, score - AssemblySettings.WRONG_PART_PENALTY)
-		_show_feedback("−%d  قطعه این مرحله نیست" % AssemblySettings.WRONG_PART_PENALTY, Color(1.0, 0.35, 0.32))
-		_play(_error_audio)
-		_haptic_error()
-		_update_ui()
+		# Count one meaningful wrong-pick per wrong part in the current step.
+		# Re-grabbing the same wrong part should not inflate VR assessment.
+		var step_key: String = String(expected_part_id())
+		var wrong_key: String = "%s|%s" % [step_key, String(part.part_id)]
+		if not _wrong_pick_seen.has(wrong_key):
+			_wrong_pick_seen[wrong_key] = true
+			mistakes += 1
+			_step_errors += 1
+			_record_step_error(_wrong_pick_by_step)
+			score = max(0, score - AssemblySettings.WRONG_PART_PENALTY)
+			_show_feedback("−%d  قطعه این مرحله نیست" % AssemblySettings.WRONG_PART_PENALTY, Color(1.0, 0.35, 0.32))
+			_play(_error_audio)
+			_haptic_error()
+			_update_ui()
 	_refresh_part_guides()
 
 func notify_part_dropped(part: AssemblyPart) -> void:
 	if session_state != SessionState.RUNNING or part.is_placed or not is_part_enabled(part.part_id):
 		return
-	if mode == Mode.TRAINING:
-		mistakes += 1
-		_step_errors += 1
-		score = max(0, score - AssemblySettings.MISPLACED_DROP_PENALTY)
-		_show_feedback("−%d  در محل درست رها نشد" % AssemblySettings.MISPLACED_DROP_PENALTY, Color(1.0, 0.60, 0.22))
-		_play(_error_audio)
-		_haptic_error()
-		_update_ui()
+	if mode != Mode.TRAINING:
+		return
+	# A wrong part was already penalized on pickup; releasing it must not
+	# double-count the same user mistake.
+	if part.part_id != expected_part_id():
+		return
+	var step_key: String = String(expected_part_id())
+	if step_key.is_empty() or _drop_by_step.has(step_key):
+		return
+	# At most one misplaced-drop penalty per assembly step.
+	mistakes += 1
+	_step_errors += 1
+	_record_step_error(_drop_by_step)
+	score = max(0, score - AssemblySettings.MISPLACED_DROP_PENALTY)
+	_show_feedback("−%d  در محل درست رها نشد" % AssemblySettings.MISPLACED_DROP_PENALTY, Color(1.0, 0.60, 0.22))
+	_play(_error_audio)
+	_haptic_error()
+	_update_ui()
 
 func notify_snap_ready(_part: AssemblyPart) -> void:
 	if session_state != SessionState.RUNNING:
@@ -336,6 +368,13 @@ func _reset_progress_and_parts() -> void:
 	first_try_count = 0
 	timed_bonus = 0
 	_step_errors = 0
+	_wrong_pick_by_step.clear()
+	_wrong_pick_seen.clear()
+	_drop_by_step.clear()
+	_assessment_passed = false
+	_assessment_grade = "—"
+	_assessment_finalized = false
+	_record_snapshot.clear()
 	completed_parts.clear()
 	focus_part_id = &""
 	elapsed_time = 0.0
@@ -349,9 +388,15 @@ func _reset_progress_and_parts() -> void:
 func _finish_session() -> void:
 	session_state = SessionState.COMPLETE
 	focus_part_id = &""
-	_play(_complete_audio)
-	_haptic_all(0.55, 0.20)
-	_show_feedback("✓ سناریو کامل شد", Color(0.35, 1.0, 0.58), 1.4)
+	_finalize_assessment(false)
+	if mode == Mode.FREE_PRACTICE or _assessment_passed:
+		_play(_complete_audio)
+		_haptic_all(0.55, 0.20)
+		_show_feedback("✓ سناریو کامل شد", Color(0.35, 1.0, 0.58), 1.4)
+	else:
+		_play(_error_audio)
+		_haptic_error()
+		_show_feedback("مونتاژ کامل شد، اما حدنصاب ارزیابی کسب نشد", Color(1.0, 0.48, 0.28), 1.8)
 	_update_ui()
 	_refresh_part_guides()
 	_set_result_visible(true)
@@ -362,6 +407,7 @@ func _fail_timed_session() -> void:
 		return
 	session_state = SessionState.FAILED
 	focus_part_id = &""
+	_finalize_assessment(true)
 	_play(_error_audio)
 	_haptic_error()
 	_show_feedback("⏱ زمان تمام شد", Color(1.0, 0.35, 0.28), 1.5)
@@ -475,11 +521,16 @@ func _update_time_label() -> void:
 		time_label.text = "زمان  %s" % _format_time(elapsed_time)
 
 func _accuracy_percent() -> int:
-	var good := completed_parts.size()
-	var total := good + mistakes
-	if total <= 0:
+	# VR-friendly stage accuracy: half credit comes from completion and half
+	# from completing steps on the first meaningful attempt. Repeated hand
+	# repositioning no longer destroys accuracy.
+	var total_steps: int = sequence.size()
+	if total_steps <= 0:
 		return 100
-	return int(round((float(good) / float(total)) * 100.0))
+	var completion_ratio: float = float(completed_parts.size()) / float(total_steps)
+	var first_try_ratio: float = float(first_try_count) / float(total_steps)
+	var accuracy: int = int(round((completion_ratio * 0.5 + first_try_ratio * 0.5) * 100.0))
+	return clampi(accuracy, 0, 100)
 
 func _max_score() -> int:
 	var base := sequence.size() * (AssemblySettings.CORRECT_PLACEMENT_SCORE + AssemblySettings.FIRST_TRY_BONUS) + AssemblySettings.COMPLETION_BONUS
@@ -498,13 +549,155 @@ func _set_result_visible(value: bool) -> void:
 func _update_result_panel() -> void:
 	if result_body == null:
 		return
-	if session_state == SessionState.FAILED:
-		result_body.text = "سناریو: %s\nزمان تمام شد\nپیشرفت: %d / %d قطعه\nامتیاز: %d\nخطا: %d" % [scenario_name_fa(), completed_parts.size(), sequence.size(), score, mistakes]
-	elif mode == Mode.FREE_PRACTICE:
-		result_body.text = "سناریو: %s\nتمرین آزاد کامل شد\nزمان: %s\nقطعات: %d / %d\nدر این حالت امتیاز و جریمه محاسبه نمی‌شود." % [scenario_name_fa(), _format_time(elapsed_time), completed_parts.size(), sequence.size()]
-	else:
-		var timed_line := "\nBonus زمان: +%d" % timed_bonus if scenario == Scenario.TIMED else ""
-		result_body.text = "سناریو: %s\nامتیاز نهایی: %d / %d\nزمان: %s\nدقت: %d%%    |    خطا: %d\nاولین تلاش: %d / %d%s" % [scenario_name_fa(), score, _max_score(), _format_time(elapsed_time), _accuracy_percent(), mistakes, first_try_count, sequence.size(), timed_line]
+
+	if mode == Mode.FREE_PRACTICE:
+		if result_title:
+			result_title.text = "تمرین آزاد کامل شد"
+			result_title.modulate = Color(0.45, 1.0, 0.72, 1.0)
+		result_body.text = "سناریو: %s\nزمان: %s\nقطعات: %d / %d\nامتیاز و Pass/Fail در تمرین آزاد محاسبه نمی‌شود." % [scenario_name_fa(), _format_time(elapsed_time), completed_parts.size(), sequence.size()]
+		return
+
+	if not _assessment_finalized:
+		_finalize_assessment(session_state == SessionState.FAILED)
+
+	if result_title:
+		if _assessment_passed:
+			result_title.text = "قبول • Grade %s" % _assessment_grade
+			result_title.modulate = Color(0.45, 1.0, 0.66, 1.0)
+		else:
+			result_title.text = "مردود • Grade F"
+			result_title.modulate = Color(1.0, 0.42, 0.32, 1.0)
+
+	var progress_line: String = "پیشرفت: %d / %d" % [completed_parts.size(), sequence.size()]
+	var record_line: String = _record_line_text()
+	var error_line: String = _error_breakdown_text()
+	var new_record_line: String = _new_record_text()
+	var timed_line: String = " • Bonus زمان +%d" % timed_bonus if scenario == Scenario.TIMED and session_state == SessionState.COMPLETE else ""
+
+	result_body.text = "%s • %s\n%s\nامتیاز: %d / %d • کیفیت %d%%%s\nزمان: %s • دقت: %d%% • خطا: %d\nFirst Try: %d / %d\nخطای مرحله‌ای: %s\n%s\n%s" % [
+		scenario_name_fa(), AssemblySettings.difficulty_name_fa(),
+		progress_line,
+		score, _max_score(), _quality_score_percent(), timed_line,
+		_format_time(elapsed_time), _accuracy_percent(), mistakes,
+		first_try_count, sequence.size(),
+		error_line,
+		record_line,
+		new_record_line
+	]
+
+func _setup_assessment_ui() -> void:
+	if result_panel != null:
+		result_title = result_panel.get_node_or_null("ResultTitle") as Label3D
+	if result_body != null:
+		result_body.font_size = 15
+		result_body.pixel_size = 0.00118
+
+func _record_step_error(target: Dictionary) -> void:
+	var step_id: StringName = expected_part_id()
+	if step_id == &"":
+		return
+	var key: String = String(step_id)
+	target[key] = int(target.get(key, 0)) + 1
+
+func _quality_score_percent() -> int:
+	var base_max: int = sequence.size() * (AssemblySettings.CORRECT_PLACEMENT_SCORE + AssemblySettings.FIRST_TRY_BONUS) + AssemblySettings.COMPLETION_BONUS
+	if base_max <= 0:
+		return 0
+	var quality_score: int = score - timed_bonus
+	return clampi(int(round((float(quality_score) / float(base_max)) * 100.0)), 0, 100)
+
+func _assessment_should_pass(force_fail: bool) -> bool:
+	if force_fail or session_state != SessionState.COMPLETE:
+		return false
+	if completed_parts.size() < sequence.size():
+		return false
+	return _accuracy_percent() >= PASS_MIN_ACCURACY and _quality_score_percent() >= PASS_MIN_QUALITY_SCORE
+
+func _calculate_grade(passed: bool) -> String:
+	if not passed:
+		return "F"
+	var accuracy: int = _accuracy_percent()
+	var quality: int = _quality_score_percent()
+	if accuracy >= 95 and quality >= 90 and mistakes <= 1:
+		if scenario != Scenario.TIMED or elapsed_time <= TIMED_GRADE_A_MAX_S:
+			return "A"
+	if accuracy >= 85 and quality >= 80 and mistakes <= 3:
+		if scenario != Scenario.TIMED or elapsed_time <= TIMED_GRADE_B_MAX_S:
+			return "B"
+	return "C"
+
+func _finalize_assessment(force_fail: bool) -> void:
+	if _assessment_finalized or mode == Mode.FREE_PRACTICE:
+		return
+	_assessment_passed = _assessment_should_pass(force_fail)
+	_assessment_grade = _calculate_grade(_assessment_passed)
+	var key: String = AssessmentStoreScript.record_key(scenario_name_en(), _difficulty_key())
+	_record_snapshot = AssessmentStoreScript.save_attempt(
+		key,
+		score,
+		elapsed_time,
+		_accuracy_percent(),
+		_assessment_grade,
+		_assessment_passed
+	)
+	_assessment_finalized = true
+
+func _difficulty_key() -> String:
+	match AssemblySettings.CURRENT_DIFFICULTY:
+		AssemblySettings.Difficulty.EASY: return "EASY"
+		AssemblySettings.Difficulty.HARD: return "HARD"
+		_: return "NORMAL"
+
+func _part_name_fa(part_id: StringName) -> String:
+	match part_id:
+		&"auger": return "مارپیچ"
+		&"blade": return "تیغه"
+		&"plate": return "صفحه"
+		&"lock_ring": return "مهره"
+		&"handle": return "دسته"
+		&"motor_unit": return "موتور"
+		&"sausage_attachment": return "سری سوسیس"
+		&"hopper_tray": return "سینی"
+		&"pusher": return "گوشت‌کوب"
+		_: return String(part_id)
+
+func _error_breakdown_text() -> String:
+	var chunks: Array[String] = []
+	for part_id: StringName in sequence:
+		var key: String = String(part_id)
+		var count: int = int(_wrong_pick_by_step.get(key, 0)) + int(_drop_by_step.get(key, 0))
+		if count > 0:
+			chunks.append("%s×%d" % [_part_name_fa(part_id), count])
+	if chunks.is_empty():
+		return "بدون خطا"
+	return "، ".join(chunks)
+
+func _record_line_text() -> String:
+	if _record_snapshot.is_empty():
+		return "رکورد: —"
+	var best_score: int = int(_record_snapshot.get("best_score", -1))
+	var best_time: float = float(_record_snapshot.get("best_time", -1.0))
+	var best_grade: String = String(_record_snapshot.get("best_grade", ""))
+	var attempts: int = int(_record_snapshot.get("attempts", 0))
+	var passes: int = int(_record_snapshot.get("passes", 0))
+	var baseline_score: int = int(_record_snapshot.get("baseline_score", -1))
+	var baseline_time: float = float(_record_snapshot.get("baseline_time", -1.0))
+	var baseline_grade: String = String(_record_snapshot.get("baseline_grade", ""))
+	if best_score >= 0 and best_time >= 0.0:
+		return "بهترین رکورد قبولی\nامتیاز: %d\nGrade: %s • زمان: %s\nتلاش: %d • قبولی: %d" % [best_score, best_grade, _format_time(best_time), attempts, passes]
+	if baseline_score >= 0 and baseline_time >= 0.0:
+		return "رکورد پایه\nامتیاز: %d\nGrade: %s • زمان: %s\nتلاش: %d • قبولی: %d" % [baseline_score, baseline_grade, _format_time(baseline_time), attempts, passes]
+	return "رکورد قبولی: —\nتلاش: %d • قبولی: %d" % [attempts, passes]
+
+func _new_record_text() -> String:
+	if _record_snapshot.is_empty():
+		return "حدنصاب: دقت 75% • کیفیت 70%"
+	if bool(_record_snapshot.get("baseline_created_now", false)):
+		return "★ اولین رکورد ثبت شد"
+	var is_new: bool = bool(_record_snapshot.get("new_best_score", false)) or bool(_record_snapshot.get("new_best_time", false)) or bool(_record_snapshot.get("new_best_accuracy", false)) or bool(_record_snapshot.get("new_best_grade", false))
+	if _assessment_passed and is_new:
+		return "★ رکورد قبولی جدید ثبت شد"
+	return "حدنصاب: دقت 75% • کیفیت 70%"
 
 func _show_feedback(text: String, color: Color, duration: float = 1.0) -> void:
 	if feedback_label == null:

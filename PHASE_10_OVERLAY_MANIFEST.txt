@@ -1,0 +1,11 @@
+Phase 10 cumulative Quest 3 overlay
+- Includes final validated Phase 9 fair assessment and RTL record layout
+- Preserves all Phase 8 scenario / hover / audio / sausage-order / immediate auto-snap fixes
+- Android Gradle export preset for Meta Quest 3 family
+- ARM64-only APK target
+- minSdk 32 / targetSdk 34
+- Reproducible Godot OpenXR Vendors 5.1.0-stable installer
+- Quest 3 prepare / preflight / debug-build / release-build scripts
+- Physical-device QA gate documented separately from Simulator validation
+- No Poly Haven workshop textures included or replaced
+- No generated android/build directory, APKs, keystores, credentials, or third-party binaries committed
