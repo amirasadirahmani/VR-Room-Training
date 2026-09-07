@@ -20,7 +20,10 @@ rm -rf "$TARGET"
 mkdir -p "$ROOT/addons"
 cp -R "$SOURCE" "$TARGET"
 
-if [[ ! -f "$TARGET/plugin.cfg" && ! -f "$TARGET/godotopenxrvendors.gdextension" ]]; then
+# OpenXR Vendors 5.1 ships its GDExtension entry point as plugin.gdextension.
+# Keep the older names as fallbacks so this installer remains tolerant of
+# packaging changes between vendor releases.
+if [[ ! -f "$TARGET/plugin.gdextension" && ! -f "$TARGET/plugin.cfg" && ! -f "$TARGET/godotopenxrvendors.gdextension" ]]; then
   echo "ERROR: OpenXR Vendors install looks incomplete." >&2
   exit 1
 fi
