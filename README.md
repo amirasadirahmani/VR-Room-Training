@@ -1,19 +1,21 @@
 # VR Room Training — Meat Grinder Assembly
 
-Current milestone: **Phase 7 — Visual & Interaction Polish**
+Current milestone: **Phase 8 — Scenario & Challenge System**
 
-- OpenXR / Meta XR Simulator
-- Mechanical assembly fit
-- Training + Free Practice
-- Easy / Normal / Hard
-- Scoring, penalties, timer, accuracy, First Try
-- Full reset and completion result
-- Audio feedback + Quest haptic hooks
-- PBR workshop materials
-- Professional workshop dressing and part staging
-- Quest-conscious lighting polish
-- Immediate green-zone auto-snap preserved
+Scenarios:
+- Manual grinder + handle
+- Electric variant + motor unit
+- Sausage configuration: Lock Ring → Sausage Attachment
+- 90-second timed challenge
 
-See `PHASE_7_VISUAL_POLISH_FA.md` for the Phase 7 test flow.
+Core systems retained:
+- Meta XR Simulator / OpenXR
+- Immediate green-zone Auto-Snap
+- Mechanical fit and legal collision clearance
+- Training / Free Practice
+- Score, timer, accuracy, first-try bonus
+- Exclusive one-button hover + audible UI clicks
+- PBR workshop and Phase 7 visual polish
 
-Godot 4.7 + OpenXR training prototype for Meta Quest 3 / Meta XR Simulator.
+Phase updates are overlays/code changes and do not replace `assets/textures/workshop/`.
+See `PHASE_8_SCENARIOS_FA.md` for the final Phase 8 test flow.

@@ -115,8 +115,11 @@ func can_pick_up(by: Node3D) -> bool:
 		return false
 
 	var manager := _manager()
-	if manager != null and not manager.can_interact_with_parts():
-		return false
+	if manager != null:
+		if not manager.can_interact_with_parts():
+			return false
+		if manager.has_method("is_part_enabled") and not manager.is_part_enabled(part_id):
+			return false
 
 	# فقط یک قطعه در کل تجربه می‌تواند همزمان در دست باشد.
 	for node in get_tree().get_nodes_in_group("assembly_parts"):

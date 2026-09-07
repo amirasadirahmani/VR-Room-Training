@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3]
+[ext_resource type="PackedScene" path="res://assets/models/grinder/part_sausage_attachment.glb" id="1_model"]
+[ext_resource type="Script" path="res://scripts/assembly/assembly_part.gd" id="2_script"]
+[ext_resource type="Material" path="res://materials/workshop/stainless_brushed.tres" id="3_surface"]
+[sub_resource type="CylinderShape3D" id="Shape"]
+radius = 0.060
+height = 0.13
+[node name="PartSausageAttachment" type="RigidBody3D"]
+collision_layer = 4
+collision_mask = 15
+mass = 0.30
+freeze = true
+freeze_mode = 1
+contact_monitor = true
+max_contacts_reported = 8
+script = ExtResource("2_script")
+part_id = &"sausage_attachment"
+display_name = "نازل سوسیس"
+score_value = 10
+surface_material = ExtResource("3_surface")
+hold_visual_rotation_degrees = Vector3(0, 0, -55)
+guide_axis = 1
+guide_offset_m = 0.004
+guide_inner_radius_m = 0.024
+guide_outer_radius_m = 0.034
+name_label_height_m = 0.16
+[node name="Model" parent="." instance=ExtResource("1_model")]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("Shape")
+rotation_degrees = Vector3(0, 0, 90)
